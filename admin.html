@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Admin — Parcel OTP</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--text:#1a1a18;--text2:#6b6b65;--text3:#9b9b93;--accent:#1a6b3c;--accent-bg:#e6f4ec;--accent-light:#d0ebdb;--danger:#c0392b;--danger-bg:#fdf0ef;--warn:#b8860b;--warn-bg:#fdf6e3;--radius:12px;--radius-sm:8px;--shadow:0 2px 8px rgba(0,0,0,0.08),0 8px 24px rgba(0,0,0,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
@@ -32,12 +32,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .u-card.selected .u-check svg{display:block}
 .pw-wrap{display:none}.pw-wrap.show{display:block;animation:fadeUp .2s ease}
 .pw-lbl{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
-.pw-input{width:100%;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:.15s}
+.pw-input{width:100%;padding:11px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;border:1.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:.15s}
 .pw-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
 .pw-input.err{border-color:var(--danger)}
 .pw-err{font-size:12px;color:var(--danger);margin-top:5px;display:none}
 .pw-err.show{display:block}
-.btn-login{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:12px;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-login{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:12px;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px}
 .btn-login:hover{opacity:.9}.btn-login:active{transform:scale(.98)}.btn-login:disabled{opacity:.5;cursor:not-allowed}
 .btn-login svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 
@@ -54,7 +54,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .chip.warn{background:var(--warn-bg);color:var(--warn);border-color:rgba(184,134,11,.2)}
 .user-pill{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 6px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;color:var(--text2);background:var(--surface2)}
 .pill-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
-.btn-out{padding:5px 10px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:.15s}
+.btn-out{padding:5px 10px;font-size:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:.15s}
 .btn-out:hover{color:var(--danger);border-color:rgba(192,57,43,.3);background:var(--danger-bg)}
 
 .tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 1rem;overflow-x:auto;scrollbar-width:none}
@@ -70,7 +70,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .search-wrap{position:relative;margin-bottom:1rem}
 .s-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
 .s-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-.search-input{width:100%;padding:12px 12px 12px 38px;font-size:15px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);outline:none;transition:.15s}
+.search-input{width:100%;padding:12px 12px 12px 38px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);outline:none;transition:.15s}
 .search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.12)}
 .search-input::placeholder{color:var(--text3)}
 
@@ -104,7 +104,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .meta.mono{font-family:'DM Mono',monospace;font-size:11px}
 .btn-delete{font-size:12px;padding:5px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;transition:.15s}
 .btn-delete:hover{background:var(--danger-bg);color:var(--danger);border-color:rgba(192,57,43,.2)}
-.btn-deliver{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s;font-family:'DM Sans',sans-serif}
+.btn-deliver{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s;font-family:'Plus Jakarta Sans',sans-serif}
 .btn-deliver svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .btn-deliver:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-light)}
 .delivered-badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent);display:inline-flex;align-items:center;gap:3px}
@@ -115,10 +115,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .otp-edit.open{display:flex;gap:6px;align-items:center}
 .otp-edit input{flex:1;padding:7px 10px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;letter-spacing:2px}
 .otp-edit input:focus{border-color:var(--accent)}
-.btn-save-otp{padding:7px 14px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
-.btn-cancel-otp{padding:7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer}
+.btn-save-otp{padding:7px 14px;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
+.btn-cancel-otp{padding:7px 10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer}
 
-.mode-btn{padding:8px 16px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;transition:.15s}
+.mode-btn{padding:8px 16px;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;transition:.15s}
 .mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .hint-box{background:#fdf6e3;border:1px solid rgba(184,134,11,.2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:12px;line-height:1.7}
 .hint-box strong{font-weight:600}
@@ -130,8 +130,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .field-sm label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
 .field-sm input,.field-sm select{width:100%;padding:9px 12px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
 .field-sm input:focus,.field-sm select:focus{border-color:var(--accent)}
-.field-sm select{font-family:'DM Sans',sans-serif}
-.btn-submit{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:4px;transition:opacity .15s,transform .1s;width:100%;justify-content:center}
+.field-sm select{font-family:'Plus Jakarta Sans',sans-serif}
+.btn-submit{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:4px;transition:opacity .15s,transform .1s;width:100%;justify-content:center}
 .btn-submit:hover{opacity:.9}.btn-submit:active{transform:scale(.98)}
 .btn-submit svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 .form-toast{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:none}
@@ -153,7 +153,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .toast-bar.ok{background:var(--accent);color:#fff}
 .toast-bar.err{background:var(--danger);color:#fff}
 .filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.filter-btn{padding:6px 12px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.15s}
+.filter-btn{padding:6px 12px;font-size:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.15s}
 .filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}.chips{display:none}.topbar{padding:0 1rem}.panel{padding:1rem}}
 </style>
@@ -276,9 +276,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       Separate multiple parcels with a blank line. If tracking already exists, OTP details will be updated automatically.
     </div>
 
+    <!-- SMART PASTE -->
+    <div style="background:var(--surface2);border:1.5px dashed var(--accent-light);border-radius:var(--radius);padding:1rem;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span style="font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px">Smart Paste</span>
+        <span style="font-size:11px;color:var(--text3);margin-left:2px">— paste any WhatsApp message, AI fills the form</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <textarea id="a-smart-input" rows="3" style="flex:1;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);resize:none;outline:none;line-height:1.6" placeholder="Paste WhatsApp OTP message here…"></textarea>
+        <button onclick="adminSmartParse()" id="a-smart-btn" style="padding:0 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:.15s">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Parse
+        </button>
+      </div>
+      <div id="a-smart-status" style="font-size:12px;margin-top:6px;display:none"></div>
+    </div>
+
     <div style="margin-bottom:10px">
       <label style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Assign to user (optional)</label>
-      <select id="a-user" style="width:100%;padding:9px 12px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none">
+      <select id="a-user" style="width:100%;padding:9px 12px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none">
         <option value="">— Admin entry —</option>
       </select>
     </div>
@@ -560,6 +576,42 @@ async function loadUsersForDropdown(){
   const snap=await getDocs(collection(db,'users'));
   allUsers=snap.docs.map(d=>({id:d.id,...d.data()}));
   sel.innerHTML='<option value="">— Admin entry —</option>'+allUsers.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
+}
+
+window.adminSmartParse = async function(){
+  const raw = document.getElementById('a-smart-input').value.trim();
+  const statusEl = document.getElementById('a-smart-status');
+  const btn = document.getElementById('a-smart-btn');
+  if(!raw){ statusEl.style.display='block'; statusEl.style.color='var(--danger)'; statusEl.textContent='Please paste a message first.'; return; }
+  btn.disabled=true; btn.textContent='Parsing…';
+  statusEl.style.display='block'; statusEl.style.color='var(--text3)'; statusEl.textContent='AI is reading your message…';
+  try{
+    const res = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:300,
+        messages:[{role:"user",content:"Extract parcel details from this WhatsApp message and return ONLY a JSON object with these fields: parcelName, tracking, otp, last4, product. If a field is not found return empty string. For last4 extract only the last 4 digits of any phone/mobile number found. Message:
+
+"+raw}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text||'';
+    const clean = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    if(parsed.parcelName) document.getElementById('a-custname').value=parsed.parcelName;
+    if(parsed.tracking) document.getElementById('a-tracking').value=parsed.tracking;
+    if(parsed.otp) document.getElementById('a-otp').value=parsed.otp;
+    if(parsed.last4){ const d=parsed.last4.replace(/[^0-9]/g,''); document.getElementById('a-last4').value=d.slice(-4); }
+    if(parsed.product) document.getElementById('a-product').value=parsed.product;
+    document.getElementById('a-smart-input').value='';
+    statusEl.style.color='var(--accent)'; statusEl.textContent='✓ Fields filled! Review and click Import.';
+  }catch(e){
+    statusEl.style.color='var(--danger)'; statusEl.textContent='Could not parse. Fill fields manually.';
+  }
+  btn.disabled=false; btn.textContent='Parse';
 }
 
 let addMode = 'tracking';
