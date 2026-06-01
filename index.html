@@ -157,7 +157,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAWKEUcFGgEn20Uqc3pkHxzDuewO_FOW8w",
@@ -171,94 +171,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let currentUser = null;
-let unsubscribe = null;
-
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function initials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast-bar '+type;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
 
-window.showAuthTab = function(tab) {
-  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'&&i===0)||(tab==='register'&&i===1)));
-  document.getElementById('auth-login').style.display = tab==='login'?'block':'none';
-  document.getElementById('auth-register').style.display = tab==='register'?'block':'none';
-}
+// Remember submitter name across page reloads
+try{
+  const saved = localStorage.getItem('submitter_name');
+  if(saved) document.getElementById('f-submitter').value = saved;
+}catch(e){}
 
-// REGISTER
-window.doRegister = async function() {
-  const name = document.getElementById('r-name').value.trim();
-  const pw = document.getElementById('r-pw').value;
-  const pw2 = document.getElementById('r-pw2').value;
-  const errEl = document.getElementById('r-err');
-  errEl.classList.remove('show');
-  if (!name){errEl.textContent='Please enter your name.';errEl.classList.add('show');return}
-  if (!pw){errEl.textContent='Please set a password.';errEl.classList.add('show');return}
-  if (pw !== pw2){errEl.textContent='Passwords do not match.';errEl.classList.add('show');return}
-  // Check if name already taken
-  const q = query(collection(db,'users'), where('nameLower','==',name.toLowerCase()));
-  const snap = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(m=>m.getDocs(q));
-  if (!snap.empty){errEl.textContent='This name is already registered. Try signing in.';errEl.classList.add('show');return}
-  const ref = await addDoc(collection(db,'users'),{name,nameLower:name.toLowerCase(),password:pw,role:'user',createdAt:serverTimestamp()});
-  currentUser = {id:ref.id, name, role:'user'};
-  try{localStorage.setItem('parcel_session',JSON.stringify({id:ref.id,name,role:'user'}))}catch(e){}
-  launchMain();
-}
-
-// LOGIN
-window.doLogin = async function() {
-  const name = document.getElementById('l-name').value.trim();
-  const pw = document.getElementById('l-pw').value;
-  const errEl = document.getElementById('l-err');
-  errEl.classList.remove('show');
-  if (!name||!pw){errEl.textContent='Please enter name and password.';errEl.classList.add('show');return}
-  const {getDocs} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-  const q = query(collection(db,'users'), where('nameLower','==',name.toLowerCase()), where('password','==',pw));
-  const snap = await getDocs(q);
-  if (snap.empty){errEl.classList.add('show');return}
-  const ud = snap.docs[0];
-  currentUser = {id:ud.id, ...ud.data()};
-  try{localStorage.setItem('parcel_session',JSON.stringify({id:ud.id,name:currentUser.name,role:currentUser.role}))}catch(e){}
-  launchMain();
-}
-
-window.doLogout = function() {
-  try{localStorage.removeItem('parcel_session')}catch(e){}
-  if(unsubscribe)unsubscribe();
-  currentUser=null;
-  showScreen('s-auth');
-}
-
-function launchMain() {
-  document.getElementById('u-name').textContent = currentUser.name;
-  document.getElementById('u-av').textContent = initials(currentUser.name);
-  showScreen('s-main');
-  listenParcels();
-}
-
-function listenParcels() {
-  if(unsubscribe)unsubscribe();
-  const q = query(collection(db,'parcels'), where('userId','==',currentUser.id));
-  unsubscribe = onSnapshot(q, snap => {
-    const parcels = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
-      if(a.delivered!==b.delivered)return a.delivered?1:-1;
-      const at = a.createdAt?.toMillis?.()||0;
-      const bt = b.createdAt?.toMillis?.()||0;
-      return bt-at;
-    });
-    renderParcels(parcels);
-  });
-}
+// Listen to recent parcels (last 30)
+const q = query(collection(db,'parcels'), orderBy('createdAt','desc'), limit(30));
+onSnapshot(q, snap => {
+  const parcels = snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderParcels(parcels);
+});
 
 function renderParcels(parcels) {
   const el = document.getElementById('my-parcels');
-  if(!parcels.length){el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels yet — submit one above</p></div>`;return}
+  if(!parcels.length){
+    el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels submitted yet</p></div>`;
+    return;
+  }
   el.innerHTML='<div class="parcel-list">'+parcels.map(p=>{
     const hasOtp = p.otp && p.otp!=='—';
     const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
     return `<div class="p-card${p.delivered?' delivered':''}">
       <div class="p-top">
-        <div><div class="p-name">${esc(p.customerName)}</div><div class="p-product">${esc(p.product)}</div></div>
+        <div>
+          <div class="p-name">${esc(p.customerName&&p.customerName!=='—'?p.customerName:'—')}</div>
+          <div class="p-product">${esc(p.product&&p.product!=='—'?p.product:'')}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">by ${esc(p.userName||'—')}</div>
+        </div>
         <div class="otp-box">
           <div class="otp-lbl">OTP</div>
           ${hasOtp ? `<div class="otp-val">${esc(p.otp)}</div>` : `<div class="otp-pending">Awaiting OTP</div>`}
@@ -275,31 +218,51 @@ function renderParcels(parcels) {
 }
 
 window.submitParcel = async function() {
+  const submitterName = document.getElementById('f-submitter').value.trim();
   const customerName = document.getElementById('f-name').value.trim();
   const tracking = document.getElementById('f-tracking').value.trim();
   const otp = document.getElementById('f-otp').value.trim();
   const last4 = document.getElementById('f-last4').value.trim();
   const product = document.getElementById('f-product').value.trim();
-  if(!customerName||!tracking){toast('Customer name and tracking ID are required.','err');return}
+  const toastEl = document.getElementById('f-toast');
+  toastEl.style.display='none';
+
+  if(!submitterName){
+    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
+    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Please enter your name.';return;
+  }
+  if(!tracking){
+    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
+    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Tracking ID is required.';return;
+  }
+
+  // Save submitter name for next time
+  try{localStorage.setItem('submitter_name', submitterName)}catch(e){}
+
   const btn = document.getElementById('submit-btn');
   btn.disabled=true; btn.textContent='Submitting…';
   try {
     await addDoc(collection(db,'parcels'),{
-      customerName, tracking, otp:otp||'—', last4:last4||'—', product:product||'—',
-      userId:currentUser.id, userName:currentUser.name,
-      delivered:false, createdAt:serverTimestamp()
+      customerName: customerName||'—',
+      tracking,
+      otp: otp||'—',
+      last4: last4||'—',
+      product: product||'—',
+      userId: 'user',
+      userName: submitterName,
+      delivered: false,
+      createdAt: serverTimestamp()
     });
+    // Clear all except submitter name
     ['f-name','f-tracking','f-otp','f-last4','f-product'].forEach(id=>document.getElementById(id).value='');
-    toast('Parcel submitted!');
-  } catch(e){toast('Error submitting. Try again.','err')}
+    toastEl.style.display='block';toastEl.style.background='var(--accent-bg)';toastEl.style.color='var(--accent)';
+    toastEl.style.border='1px solid var(--accent-light)';toastEl.textContent='✓ Parcel submitted successfully!';
+    setTimeout(()=>toastEl.style.display='none', 3000);
+  } catch(e){
+    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
+    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Error submitting. Please try again.';
+  }
   btn.disabled=false; btn.textContent='Submit Parcel';
 }
-
-// Auto login from session
-try {
-  const sess = JSON.parse(localStorage.getItem('parcel_session')||'null');
-  if(sess?.id){currentUser=sess;launchMain();}
-} catch(e){}
 </script>
 </body>
-</html>
