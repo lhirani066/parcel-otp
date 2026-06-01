@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Parcel Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--text:#1a1a18;--text2:#6b6b65;--text3:#9b9b93;--accent:#1a6b3c;--accent-bg:#e6f4ec;--accent-light:#d0ebdb;--danger:#c0392b;--danger-bg:#fdf0ef;--warn:#b8860b;--warn-bg:#fdf6e3;--radius:12px;--radius-sm:8px;--shadow:0 2px 8px rgba(0,0,0,0.08),0 8px 24px rgba(0,0,0,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
 
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
 .tb-brand{display:flex;align-items:center;gap:8px;padding:13px 0;flex:1}
@@ -24,11 +24,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form-grid .full{grid-column:1/-1}
 .field-sm label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-.field-sm input{width:100%;padding:10px 12px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+.field-sm input{width:100%;padding:10px 12px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
 .field-sm input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
 .field-sm input.mono{font-family:'DM Mono',monospace}
 
-.btn-submit{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:10px;transition:opacity .15s,transform .1s}
+.btn-submit{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:10px;transition:opacity .15s,transform .1s}
 .btn-submit:hover{opacity:.9}.btn-submit:active{transform:scale(.98)}.btn-submit:disabled{opacity:.5;cursor:not-allowed}
 
 .form-toast{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:none}
@@ -70,6 +70,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <div class="main">
   <div class="section-title" style="margin-bottom:10px">Submit a parcel</div>
+
+  <!-- SMART PASTE -->
+  <div style="background:var(--surface);border:1.5px dashed var(--accent-light);border-radius:var(--radius);padding:1rem;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="var(--accent)" stroke="none"/></svg>
+      <span style="font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px">Smart Paste</span>
+      <span style="font-size:11px;color:var(--text3);margin-left:2px">— paste any WhatsApp message, AI fills the form</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <textarea id="smart-paste-input" rows="3" style="flex:1;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);resize:none;outline:none;line-height:1.6" placeholder="Paste your WhatsApp OTP message here…"></textarea>
+      <button onclick="smartParse()" id="smart-btn" style="padding:0 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:.15s">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Parse
+      </button>
+    </div>
+    <div id="smart-status" style="font-size:12px;margin-top:6px;display:none"></div>
+  </div>
+
   <div class="form-card">
     <div class="form-grid">
       <div class="field-sm full">
@@ -128,6 +146,47 @@ try{
   if(saved) document.getElementById('f-submitter').value = saved;
 }catch(e){}
 
+
+window.smartParse = async function(){
+  const raw = document.getElementById('smart-paste-input').value.trim();
+  const statusEl = document.getElementById('smart-status');
+  const btn = document.getElementById('smart-btn');
+  if(!raw){ statusEl.style.display='block'; statusEl.style.color='var(--danger)'; statusEl.textContent='Please paste a message first.'; return; }
+
+  btn.disabled=true; btn.textContent='Parsing…';
+  statusEl.style.display='block'; statusEl.style.color='var(--text3)'; statusEl.textContent='AI is reading your message…';
+
+  try{
+    const res = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:300,
+        messages:[{role:"user",content:`Extract parcel details from this WhatsApp message and return ONLY a JSON object with these fields: submitterName, parcelName, tracking, otp, last4, product. If a field is not found return "". For last4 extract only the last 4 digits of any phone/mobile number found. Message:
+
+${raw}`}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text||'';
+    const clean = text.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const parsed = JSON.parse(clean);
+
+    if(parsed.submitterName) document.getElementById('f-submitter').value = parsed.submitterName;
+    if(parsed.parcelName) document.getElementById('f-name').value = parsed.parcelName;
+    if(parsed.tracking) document.getElementById('f-tracking').value = parsed.tracking;
+    if(parsed.otp) document.getElementById('f-otp').value = parsed.otp;
+    if(parsed.last4){ const d=parsed.last4.replace(/[^0-9]/g,''); document.getElementById('f-last4').value=d.slice(-4); }
+    if(parsed.product) document.getElementById('f-product').value = parsed.product;
+
+    document.getElementById('smart-paste-input').value='';
+    statusEl.style.color='var(--accent)'; statusEl.textContent='✓ Fields filled! Please review before submitting.';
+  }catch(e){
+    statusEl.style.color='var(--danger)'; statusEl.textContent='Could not parse. Please fill fields manually.';
+  }
+  btn.disabled=false; btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Parse';
+}
 
 window.submitParcel = async function(){
   const submitterName = document.getElementById('f-submitter').value.trim();
