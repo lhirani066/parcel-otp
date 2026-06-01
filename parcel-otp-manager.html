@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Parcel OTP">
+<title>Parcel OTP Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.1);
+  --border2: rgba(0,0,0,0.18);
+  --text: #1a1a18;
+  --text2: #6b6b65;
+  --text3: #9b9b93;
+  --accent: #1a6b3c;
+  --accent-bg: #e6f4ec;
+  --accent-light: #d0ebdb;
+  --danger: #c0392b;
+  --danger-bg: #fdf0ef;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: var(--bg);
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  width: 100%; max-width: 380px;
+  box-shadow: var(--shadow);
+  animation: fadeUp .3s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+.login-brand {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 2rem;
+}
+.login-icon {
+  width: 44px; height: 44px;
+  background: var(--accent);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.login-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.login-title { font-size: 18px; font-weight: 600; }
+.login-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+/* USER SELECTOR */
+.user-grid {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 1.5rem;
+}
+.user-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  background: var(--surface);
+}
+.user-card:hover { border-color: var(--border2); background: var(--surface2); }
+.user-card.selected { border-color: var(--accent); background: var(--accent-bg); }
+
+.user-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600;
+  flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 14px; font-weight: 600; }
+.user-role { font-size: 12px; color: var(--text3); }
+.user-check {
+  width: 20px; height: 20px;
+  border: 1.5px solid var(--border2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: .15s;
+}
+.user-card.selected .user-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.user-check svg { width: 11px; height: 11px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; display: none; }
+.user-card.selected .user-check svg { display: block; }
+
+/* PASSWORD FIELD */
+.pw-section { display: none; }
+.pw-section.visible { display: block; animation: fadeUp .2s ease; }
+.pw-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px; }
+.pw-wrap { position: relative; }
+.pw-input {
+  width: 100%;
+  padding: 12px 42px 12px 14px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.pw-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,60,.1); }
+.pw-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(192,57,43,.1); }
+.pw-toggle {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--text3); padding: 0;
+  display: flex; align-items: center;
+}
+.pw-toggle svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.pw-error { font-size: 12px; color: var(--danger); margin-top: 6px; display: none; }
+.pw-error.visible { display: block; }
+
+.btn-login {
+  width: 100%; padding: 13px;
+  font-size: 15px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 1rem;
+  transition: opacity .15s, transform .1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-login:hover { opacity: .9; }
+.btn-login:active { transform: scale(.98); }
+.btn-login:disabled { opacity: .5; cursor: not-allowed; }
+.btn-login svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* ── APP ── */
+#app-screen { display: none; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.25rem;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 10px;
+}
+.topbar-brand { display: flex; align-items: center; gap: 8px; padding: 13px 0; flex: 1; }
+.brand-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.brand-icon svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.brand-title { font-size: 15px; font-weight: 600; }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.user-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px; font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  transition: .15s;
+  background: var(--surface2);
+}
+.user-pill:hover { background: var(--surface); border-color: var(--border2); }
+.user-pill-avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.logout-btn {
+  padding: 5px 10px;
+  font-size: 12px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  background: transparent; color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: 20px; cursor: pointer;
+  transition: .15s;
+}
+.logout-btn:hover { color: var(--danger); border-color: rgba(192,57,43,.3); background: var(--danger-bg); }
+
+.chips { display: flex; gap: 5px; }
+.chip { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); white-space: nowrap; }
+.chip.green { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-light); }
+
+.tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; padding: 0 1rem; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 11px 14px; font-size: 13px; font-weight: 500; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: color .15s; display: flex; align-items: center; gap: 5px; margin-bottom: -1px; }
+.tab svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover:not(.active) { color: var(--text); }
+
+.panel { display: none; padding: 1.25rem; max-width: 760px; margin: 0 auto; width: 100%; }
+.panel.active { display: block; }
+
+.search-wrap { position: relative; margin-bottom: 1rem; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
+.search-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.search-input { width: 100%; padding: 12px 12px 12px 38px; font-size: 15px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s; }
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,60,.12); }
+.search-input::placeholder { color: var(--text3); }
+
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.25rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
+.stat-num { font-size: 26px; font-weight: 600; line-height: 1; }
+.stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+.stat-card.green .stat-num { color: var(--accent); }
+.stat-card.gray .stat-num { color: var(--text3); }
+
+.parcel-list { display: flex; flex-direction: column; gap: 8px; }
+.parcel-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; transition: border-color .15s, box-shadow .15s; animation: slideIn .2s ease; }
+@keyframes slideIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+.parcel-card:hover { border-color: var(--border2); }
+.parcel-card.highlighted { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,60,.1); }
+.parcel-card.delivered { opacity: .5; }
+.card-row1 { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.card-left { flex: 1; min-width: 0; }
+.card-name { font-size: 15px; font-weight: 600; }
+.card-product { font-size: 13px; color: var(--text2); margin-top: 2px; }
+.otp-block { text-align: right; flex-shrink: 0; }
+.otp-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+.otp-value { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--accent); background: var(--accent-bg); padding: 4px 12px; border-radius: var(--radius-sm); letter-spacing: 3px; margin-top: 2px; display: inline-block; }
+.card-row2 { display: flex; gap: 12px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.meta { font-size: 12px; color: var(--text3); }
+.meta strong { color: var(--text2); font-weight: 500; }
+.meta.mono { font-family: 'DM Mono', monospace; font-size: 11px; }
+.card-actions { margin-left: auto; }
+.btn-deliver { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; display: flex; align-items: center; gap: 4px; transition: .15s; font-family: 'DM Sans', sans-serif; }
+.btn-deliver svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.btn-deliver:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-light); }
+.delivered-badge { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; background: var(--accent-bg); color: var(--accent); display: inline-flex; align-items: center; gap: 3px; }
+.delivered-badge svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; }
+
+.hint-box { background: #fdf6e3; border: 1px solid rgba(184,134,11,.2); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: #7a5c00; margin-bottom: 1rem; line-height: 1.7; }
+.hint-box strong { font-weight: 600; }
+.hint-box code { font-family: 'DM Mono', monospace; background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+.paste-area { width: 100%; min-height: 200px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.7; border: 1px solid var(--border2); border-radius: var(--radius); background: var(--surface); color: var(--text); resize: vertical; outline: none; transition: border-color .15s, box-shadow .15s; }
+.paste-area:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,60,.1); }
+.btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; margin-top: 10px; transition: opacity .15s, transform .1s; }
+.btn-primary:hover { opacity: .9; }
+.btn-primary:active { transform: scale(.98); }
+.btn-primary svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+.toast { margin-top: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; display: none; }
+.toast.ok { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-light); display: block; }
+.toast.err { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(192,57,43,.15); display: block; }
+
+.all-toolbar { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.btn-ghost { padding: 8px 14px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--text2); border: 1px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: .15s; }
+.btn-ghost svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.btn-ghost:hover { background: var(--surface2); }
+.btn-ghost.danger:hover { background: var(--danger-bg); color: var(--danger); border-color: rgba(192,57,43,.2); }
+
+.empty { text-align: center; padding: 3rem 1rem; color: var(--text3); }
+.empty svg { width: 40px; height: 40px; margin: 0 auto 12px; display: block; stroke: var(--text3); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.empty p { font-size: 14px; }
+
+/* ADMIN PANEL */
+.admin-section { margin-bottom: 1.5rem; }
+.section-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+.user-manage-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.user-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.user-row:last-child { border-bottom: none; }
+.row-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.row-info { flex: 1; }
+.row-name { font-size: 14px; font-weight: 500; }
+.row-username { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
+.row-role { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.role-admin { background: #fff3cd; color: #856404; }
+.role-staff { background: var(--surface2); color: var(--text2); }
+.edit-pw-btn { font-size: 12px; padding: 5px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: .15s; }
+.edit-pw-btn:hover { background: var(--surface2); }
+
+.inline-edit { padding: 0 16px 14px; border-bottom: 1px solid var(--border); background: var(--surface2); display: none; }
+.inline-edit.open { display: block; }
+.inline-edit input { width: 100%; padding: 9px 12px; font-size: 14px; font-family: 'DM Mono', monospace; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; margin-top: 8px; }
+.inline-edit input:focus { border-color: var(--accent); }
+.inline-edit-actions { display: flex; gap: 8px; margin-top: 8px; }
+.save-pw { padding: 7px 14px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; }
+.cancel-pw { padding: 7px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: transparent; color: var(--text2); border: 1px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; }
+
+
+.mode-btn { padding: 8px 16px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--text2); border: 1px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; transition: .15s; }
+.mode-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.status-badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-otp-missing { background: #fff3cd; color: #856404; }
+
+@media (max-width: 480px) {
+  .topbar { padding: 0 1rem; }
+  .chips { display: none; }
+  .panel { padding: 1rem; }
+  .otp-value { font-size: 20px; letter-spacing: 2px; }
+  .stat-num { font-size: 22px; }
+  .login-card { padding: 2rem 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      </div>
+      <div>
+        <div class="login-title">Parcel OTP Manager</div>
+        <div class="login-sub">Select your profile to continue</div>
+      </div>
+    </div>
+
+    <div class="user-grid" id="user-grid"></div>
+
+    <div class="pw-section" id="pw-section">
+      <div class="pw-label">Password</div>
+      <div class="pw-wrap">
+        <input class="pw-input" type="password" id="pw-input" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()" />
+        <button class="pw-toggle" onclick="togglePw()" type="button">
+          <svg id="eye-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="pw-error" id="pw-error">Incorrect password. Please try again.</div>
+    </div>
+
+    <button class="btn-login" id="login-btn" onclick="doLogin()" disabled>
+      <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Sign In
+    </button>
+  </div>
+</div>
+
+<!-- ══ APP SCREEN ══ -->
+<div id="app-screen">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      </div>
+      <div class="brand-title">Parcel OTP</div>
+    </div>
+    <div class="topbar-right">
+      <div class="chips">
+        <div class="chip" id="hdr-total">0 total</div>
+        <div class="chip green" id="hdr-pending">0 pending</div>
+      </div>
+      <div class="user-pill" id="user-pill">
+        <div class="user-pill-avatar" id="pill-avatar"></div>
+        <span id="pill-name"></span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs-row"></div>
+
+  <!-- SEARCH -->
+  <div class="panel active" id="p-search">
+    <div class="search-wrap">
+      <div class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <input class="search-input" id="searchInput" type="text" placeholder="Type tracking ID, last 4 digits, name, or product…" oninput="doSearch()" autocomplete="off" autocorrect="off" spellcheck="false" />
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total</div></div>
+      <div class="stat-card green"><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat-card gray"><div class="stat-num" id="st-delivered">0</div><div class="stat-lbl">Delivered</div></div>
+    </div>
+    <div id="search-results">
+      <div class="empty">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <p>Search by tracking ID when delivery person arrives</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD -->
+  <div class="panel" id="p-add">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="mode-btn active" id="mode-tracking" onclick="setMode('tracking')">Tracking IDs only</button>
+      <button class="mode-btn" id="mode-full" onclick="setMode('full')">Full details (with OTP)</button>
+    </div>
+    <div class="hint-box" id="hint-tracking">
+      <strong>Paste tracking IDs</strong> — copy from WhatsApp and paste directly. One per line or multiple together. Works with FMPP, SF, AMZN and all formats. Duplicates are skipped automatically.
+    </div>
+    <div class="hint-box" id="hint-full" style="display:none">
+      <strong>Paste full OTP messages</strong> — each parcel needs 5 lines:<br>
+      <code>Name</code> → <code>Tracking ID</code> → <code>OTP</code> → <code>Last 4 digits</code> → <code>Product name</code><br>
+      Separate multiple parcels with a blank line.
+    </div>
+    <textarea class="paste-area" id="pasteBox" placeholder="SF3202034025F&#10;SF3201966763F&#10;FMPP4049330150&#10;FMPP4049619164&#10;FMPP4049420465"></textarea>
+    <button class="btn-primary" onclick="parsePaste()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import Parcels
+    </button>
+    <div class="toast" id="parse-toast"></div>
+  </div>
+
+  <!-- ALL -->
+  <div class="panel" id="p-all">
+    <div class="all-toolbar">
+      <div class="search-wrap" style="flex:1;min-width:160px;margin-bottom:0">
+        <div class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input class="search-input" id="filterInput" type="text" placeholder="Filter parcels…" oninput="renderAll()" autocomplete="off" />
+      </div>
+      <button class="btn-ghost danger" onclick="clearDelivered()">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Clear delivered
+      </button>
+    </div>
+    <div id="all-list"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="panel" id="p-admin">
+    <div class="admin-section">
+      <div class="section-title">Manage Users & Passwords</div>
+      <div class="user-manage-card" id="admin-user-list"></div>
+    </div>
+    <div class="admin-section">
+      <div class="section-title">Danger Zone</div>
+      <button class="btn-ghost danger" onclick="clearAllData()">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Delete ALL parcel data
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// USERS CONFIG — edit names, usernames, passwords, roles here
+// roles: 'admin' (can manage users + delete data) or 'staff' (search + add + view)
+// ══════════════════════════════════════════
+const USERS_KEY = 'parcel_users_v1';
+const PARCELS_KEY = 'parcel_otp_v3';
+const SESSION_KEY = 'parcel_session_v1';
+
+const DEFAULT_USERS = [
+  { id: 'u1', name: 'Lakshya',    username: 'lakshya',    password: 'lakshya123',    role: 'admin', color: '#1a6b3c', bg: '#e6f4ec' },
+  { id: 'u2', name: 'Deepanshu',  username: 'deepanshu',  password: 'deepanshu123',  role: 'staff', color: '#1a4a8a', bg: '#e6edf8' },
+];
+
+let users = [];
+let parcels = [];
+let currentUser = null;
+let selectedUserId = null;
+
+function loadUsers() {
+  try {
+    const raw = localStorage.getItem(USERS_KEY);
+    users = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_USERS));
+  } catch(e) { users = JSON.parse(JSON.stringify(DEFAULT_USERS)); }
+}
+function saveUsers() { try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); } catch(e) {} }
+function loadParcels() { try { const r = localStorage.getItem(PARCELS_KEY); parcels = r ? JSON.parse(r) : []; } catch(e) { parcels = []; } }
+function saveParcels() { try { localStorage.setItem(PARCELS_KEY, JSON.stringify(parcels)); } catch(e) {} updateStats(); }
+
+function initials(name) { return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── LOGIN ──
+function renderUserGrid() {
+  const grid = document.getElementById('user-grid');
+  grid.innerHTML = users.map(u => `
+    <div class="user-card" id="uc-${u.id}" onclick="selectUser('${u.id}')">
+      <div class="user-avatar" style="background:${u.bg};color:${u.color}">${initials(u.name)}</div>
+      <div class="user-info">
+        <div class="user-name">${esc(u.name)}</div>
+        <div class="user-role">${u.role === 'admin' ? 'Administrator' : 'Staff'}</div>
+      </div>
+      <div class="user-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    </div>
+  `).join('');
+}
+
+function selectUser(id) {
+  selectedUserId = id;
+  document.querySelectorAll('.user-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('uc-'+id)?.classList.add('selected');
+  document.getElementById('pw-section').classList.add('visible');
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').classList.remove('visible');
+  document.getElementById('pw-input').focus();
+}
+
+function togglePw() {
+  const inp = document.getElementById('pw-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function doLogin() {
+  if (!selectedUserId) return;
+  const user = users.find(u => u.id === selectedUserId);
+  const entered = document.getElementById('pw-input').value;
+  const errEl = document.getElementById('pw-error');
+  const inp = document.getElementById('pw-input');
+  if (entered === user.password) {
+    errEl.classList.remove('visible');
+    inp.classList.remove('error');
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({userId: user.id})); } catch(e) {}
+    launchApp(user);
+  } else {
+    errEl.classList.add('visible');
+    inp.classList.add('error');
+    inp.focus();
+  }
+}
+
+function doLogout() {
+  try { sessionStorage.removeItem(SESSION_KEY); } catch(e) {}
+  currentUser = null; selectedUserId = null;
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-section').classList.remove('visible');
+  document.getElementById('login-btn').disabled = true;
+  document.querySelectorAll('.user-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('pw-error').classList.remove('visible');
+  document.getElementById('pw-input').classList.remove('error');
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  switchTab('search');
+}
+
+function launchApp(user) {
+  currentUser = user;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+
+  // pill
+  document.getElementById('pill-name').textContent = user.name;
+  const pa = document.getElementById('pill-avatar');
+  pa.textContent = initials(user.name);
+  pa.style.background = user.bg;
+  pa.style.color = user.color;
+  pa.style.fontWeight = '700';
+  pa.style.fontSize = '10px';
+
+  // tabs
+  const tabsRow = document.getElementById('tabs-row');
+  const baseTabs = [
+    {id:'search', label:'Search OTP', icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'},
+    {id:'add',    label:'Add Parcels', icon:'<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'},
+    {id:'all',    label:'All Parcels', icon:'<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'},
+  ];
+  if (user.role === 'admin') {
+    baseTabs.push({id:'admin', label:'Admin', icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>'});
+  }
+  tabsRow.innerHTML = baseTabs.map(t =>
+    `<div class="tab${t.id==='search'?' active':''}" id="t-${t.id}" onclick="switchTab('${t.id}')">${t.icon}${t.label}</div>`
+  ).join('');
+
+  loadParcels();
+  updateStats();
+  doSearch();
+  if (user.role === 'admin') renderAdminPanel();
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const tEl = document.getElementById('t-'+name);
+  const pEl = document.getElementById('p-'+name);
+  if (tEl) tEl.classList.add('active');
+  if (pEl) pEl.classList.add('active');
+  if (name==='all') renderAll();
+  if (name==='search') doSearch();
+}
+
+// ── STATS ──
+function updateStats() {
+  const total = parcels.length;
+  const delivered = parcels.filter(p=>p.delivered).length;
+  const pending = total - delivered;
+  const awaitingOtp = parcels.filter(p=>!p.delivered && (!p.otp||p.otp==='—')).length;
+  document.getElementById('st-total').textContent = total;
+  document.getElementById('st-pending').textContent = pending;
+  document.getElementById('st-delivered').textContent = delivered;
+  document.getElementById('hdr-total').textContent = total + ' total';
+  document.getElementById('hdr-pending').textContent = awaitingOtp > 0 ? pending + ' pending (' + awaitingOtp + ' no OTP)' : pending + ' pending';
+}
+
+// ── CARDS ──
+function cardHTML(p, highlight) {
+  const date = new Date(p.addedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  const hasOtp = p.otp && p.otp !== '—';
+  const otpBlock = hasOtp
+    ? `<div class="otp-block"><div class="otp-label">OTP</div><div class="otp-value">${esc(p.otp)}</div></div>`
+    : `<div class="otp-block"><div class="otp-label">OTP</div><div style="font-size:12px;font-weight:500;color:var(--warn);background:var(--warn-bg,#fdf6e3);padding:6px 10px;border-radius:var(--radius-sm);margin-top:2px;border:1px solid rgba(184,134,11,.2)">Awaiting OTP</div></div>`;
+  const nameLine = p.name && p.name !== '—' ? `<div class="card-name">${esc(p.name)}</div>` : '';
+  const productLine = p.product && p.product !== '—' ? `<div class="card-product">${esc(p.product)}</div>` : '';
+  const last4Line = p.last4 && p.last4 !== '—' ? `<div class="meta">Last 4: <strong>${esc(p.last4)}</strong></div>` : '';
+  return `<div class="parcel-card${highlight?' highlighted':''}${p.delivered?' delivered':''}" id="card-${p.id}">
+    <div class="card-row1">
+      <div class="card-left">
+        ${nameLine}
+        ${productLine}
+        ${!nameLine ? '<div class="card-name" style="font-family:var(--font-mono,monospace);font-size:13px;color:var(--text2)">'+esc(p.tracking)+'</div>' : ''}
+      </div>
+      ${otpBlock}
+    </div>
+    <div class="card-row2">
+      ${nameLine ? '<div class="meta mono"><strong>Tracking:</strong> '+esc(p.tracking)+'</div>' : ''}
+      ${last4Line}
+      <div class="meta" style="color:var(--text3)">${date}</div>
+      <div class="card-actions">
+        ${p.delivered
+          ? `<span class="delivered-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Delivered</span>`
+          : `<button class="btn-deliver" onclick="markDelivered('${p.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Mark delivered</button>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── SEARCH ──
+function doSearch() {
+  const q = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+  const container = document.getElementById('search-results');
+  if (!q) { container.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Type a tracking ID when the delivery person arrives</p></div>`; return; }
+  const hits = parcels.filter(p => p.tracking.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.last4.includes(q) || p.otp.includes(q) || p.product.toLowerCase().includes(q));
+  if (!hits.length) { container.innerHTML = `<div class="empty"><p>No parcels found for "<strong>${esc(q)}</strong>"</p></div>`; return; }
+  container.innerHTML = '<div class="parcel-list">'+hits.map(p=>cardHTML(p,true)).join('')+'</div>';
+}
+
+// ── ALL ──
+function renderAll() {
+  const q = (document.getElementById('filterInput')?.value||'').toLowerCase();
+  const container = document.getElementById('all-list');
+  let list = q ? parcels.filter(p=>p.tracking.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||p.product.toLowerCase().includes(q)) : [...parcels];
+  list.sort((a,b)=>a.delivered-b.delivered||new Date(b.addedAt)-new Date(a.addedAt));
+  if (!list.length) { container.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels yet — go to Add Parcels to import</p></div>`; return; }
+  container.innerHTML = '<div class="parcel-list">'+list.map(p=>cardHTML(p,false)).join('')+'</div>';
+}
+
+// ── ADD MODE ──
+let currentMode = 'tracking';
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-tracking').classList.toggle('active', mode==='tracking');
+  document.getElementById('mode-full').classList.toggle('active', mode==='full');
+  document.getElementById('hint-tracking').style.display = mode==='tracking' ? 'block' : 'none';
+  document.getElementById('hint-full').style.display = mode==='full' ? 'block' : 'none';
+  const ta = document.getElementById('pasteBox');
+  ta.value = '';
+  ta.placeholder = mode === 'tracking'
+    ? 'SF3202034025F\nFMPP4049330150\nFMPP4049619164'
+    : 'Rahul Sharma\nFMPP4011928937\n603028\n5598\nPS5';
+}
+
+// Detects if a line looks like a tracking ID
+function isTrackingId(line) {
+  return /^[A-Z0-9]{8,}$/i.test(line.trim());
+}
+
+// ── ADD ──
+function parsePaste() {
+  const raw = document.getElementById('pasteBox').value.trim();
+  const toast = document.getElementById('parse-toast');
+  toast.className = 'toast';
+  if (!raw) { toast.className='toast err'; toast.textContent='Paste your messages first.'; return; }
+  let added=0, skipped=0;
+
+  if (currentMode === 'tracking') {
+    // Extract all tracking-like tokens from raw text
+    const lines = raw.split(/\n/).map(l=>l.trim()).filter(Boolean);
+    lines.forEach(line => {
+      // A line may have multiple tokens or be one tracking ID
+      const tokens = line.split(/\s+/).filter(t => isTrackingId(t));
+      tokens.forEach(tracking => {
+        if (parcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase())) { skipped++; return; }
+        parcels.push({ id: Date.now()+'_'+Math.random().toString(36).slice(2), name:'—', tracking, otp:'—', last4:'—', product:'—', delivered:false, addedAt:new Date().toISOString() });
+        added++;
+      });
+    });
+  } else {
+    const blocks = raw.split(/\n{2,}/);
+    blocks.forEach(block => {
+      const lines = block.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+      if (lines.length < 4) { skipped++; return; }
+      const [name, tracking, otp, last4, ...rest] = lines;
+      const product = rest.join(' ')||'—';
+      if (!tracking||!otp) { skipped++; return; }
+      const existing = parcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
+      if (existing) {
+        // Update existing tracking-only entry with full details
+        existing.name=name; existing.otp=otp; existing.last4=last4||'—'; existing.product=product||'—';
+        added++; return;
+      }
+      parcels.push({ id: Date.now()+'_'+Math.random().toString(36).slice(2), name, tracking, otp, last4:last4||'—', product, delivered:false, addedAt:new Date().toISOString() });
+      added++;
+    });
+  }
+
+  saveParcels();
+  if (added>0) { document.getElementById('pasteBox').value=''; toast.className='toast ok'; toast.textContent=`✓ ${added} parcel${added>1?'s':''} imported!${skipped?' ('+skipped+' skipped — duplicate)':''}`; }
+  else { toast.className='toast err'; toast.textContent=`No new parcels added. ${skipped} skipped (duplicate or incomplete).`; }
+}
+
+function markDelivered(id) {
+  const p = parcels.find(p=>p.id===id);
+  if (p) { p.delivered=true; saveParcels(); doSearch(); renderAll(); }
+}
+
+function clearDelivered() {
+  const c = parcels.filter(p=>p.delivered).length;
+  if (!c) return;
+  if (!confirm(`Remove ${c} delivered parcel${c>1?'s':''}? This cannot be undone.`)) return;
+  parcels = parcels.filter(p=>!p.delivered); saveParcels(); renderAll();
+}
+
+function clearAllData() {
+  if (!confirm('Delete ALL parcel data? This cannot be undone.')) return;
+  parcels=[]; saveParcels(); renderAll(); doSearch();
+}
+
+// ── ADMIN ──
+function renderAdminPanel() {
+  const el = document.getElementById('admin-user-list');
+  if (!el) return;
+  el.innerHTML = users.map(u => `
+    <div>
+      <div class="user-row">
+        <div class="row-avatar" style="background:${u.bg};color:${u.color}">${initials(u.name)}</div>
+        <div class="row-info">
+          <div class="row-name">${esc(u.name)}</div>
+          <div class="row-username">${esc(u.username)}</div>
+        </div>
+        <span class="row-role ${u.role==='admin'?'role-admin':'role-staff'}">${u.role}</span>
+        <button class="edit-pw-btn" onclick="toggleEditPw('${u.id}')">Change password</button>
+      </div>
+      <div class="inline-edit" id="edit-${u.id}">
+        <div style="font-size:12px;color:var(--text2);font-weight:500;margin-top:10px">New password for ${esc(u.name)}</div>
+        <input type="text" id="newpw-${u.id}" placeholder="Enter new password" />
+        <div class="inline-edit-actions">
+          <button class="save-pw" onclick="savePw('${u.id}')">Save</button>
+          <button class="cancel-pw" onclick="toggleEditPw('${u.id}')">Cancel</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEditPw(uid) {
+  const el = document.getElementById('edit-'+uid);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.inline-edit').forEach(e=>e.classList.remove('open'));
+  if (!isOpen) { el.classList.add('open'); document.getElementById('newpw-'+uid).focus(); }
+}
+
+function savePw(uid) {
+  const inp = document.getElementById('newpw-'+uid);
+  const newPw = inp.value.trim();
+  if (!newPw) { inp.style.borderColor='var(--danger)'; return; }
+  const u = users.find(u=>u.id===uid);
+  if (u) { u.password=newPw; saveUsers(); }
+  toggleEditPw(uid);
+  const el = document.getElementById('edit-'+uid);
+  el.insertAdjacentHTML('afterend','<div style="padding:6px 16px 10px;font-size:12px;color:var(--accent);font-weight:500">✓ Password updated</div>');
+  setTimeout(()=>{ renderAdminPanel(); },1500);
+}
+
+// ── BOOT ──
+loadUsers();
+loadParcels();
+
+// check session
+try {
+  const sess = sessionStorage.getItem(SESSION_KEY);
+  if (sess) {
+    const {userId} = JSON.parse(sess);
+    const u = users.find(u=>u.id===userId);
+    if (u) { document.getElementById('login-screen').style.display='none'; launchApp(u); }
+    else renderUserGrid();
+  } else renderUserGrid();
+} catch(e) { renderUserGrid(); }
+</script>
+</body>
+</html>
