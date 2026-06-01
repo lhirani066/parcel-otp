@@ -10,58 +10,31 @@
 :root{--bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--text:#1a1a18;--text2:#6b6b65;--text3:#9b9b93;--accent:#1a6b3c;--accent-bg:#e6f4ec;--accent-light:#d0ebdb;--danger:#c0392b;--danger-bg:#fdf0ef;--warn:#b8860b;--warn-bg:#fdf6e3;--radius:12px;--radius-sm:8px;--shadow:0 2px 8px rgba(0,0,0,0.08),0 8px 24px rgba(0,0,0,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
-.screen{display:none;min-height:100vh}
-.screen.active{display:block}
 
-/* AUTH */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
-.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:var(--shadow);animation:fadeUp .3s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:1.75rem}
-.brand-icon{width:42px;height:42px;background:var(--accent);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.brand-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.brand-title{font-size:17px;font-weight:600}
-.brand-sub{font-size:12px;color:var(--text3);margin-top:2px}
-.auth-tabs{display:flex;gap:0;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:3px;margin-bottom:1.5rem}
-.auth-tab{flex:1;padding:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;border-radius:6px;border:none;background:transparent;color:var(--text2);transition:.15s}
-.auth-tab.active{background:var(--accent);color:#fff}
-.field{margin-bottom:1rem}
-.field label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
-.field input{width:100%;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
-.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
-.field input.err{border-color:var(--danger)}
-.err-msg{font-size:12px;color:var(--danger);margin-top:5px;display:none}
-.err-msg.show{display:block}
-.btn-full{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:opacity .15s,transform .1s;margin-top:.5rem}
-.btn-full:hover{opacity:.9}
-.btn-full:active{transform:scale(.98)}
-.btn-full:disabled{opacity:.5;cursor:not-allowed}
-
-/* TOPBAR */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.topbar-brand{display:flex;align-items:center;gap:8px;padding:13px 0;flex:1}
+.tb-brand{display:flex;align-items:center;gap:8px;padding:13px 0;flex:1}
 .tb-icon{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .tb-icon svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tb-title{font-size:15px;font-weight:600}
-.user-pill{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 6px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;color:var(--text2);background:var(--surface2)}
-.u-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:var(--accent-bg);color:var(--accent)}
-.btn-logout{padding:5px 10px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:.15s}
-.btn-logout:hover{color:var(--danger);border-color:rgba(192,57,43,.3);background:var(--danger-bg)}
 
-/* MAIN */
 .main{max-width:600px;margin:0 auto;padding:1.25rem}
 .section-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
 
-/* FORM CARD */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form-grid .full{grid-column:1/-1}
 .field-sm label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-.field-sm input{width:100%;padding:9px 12px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
-.field-sm input:focus{border-color:var(--accent)}
-.field-sm input.err{border-color:var(--danger)}
+.field-sm input{width:100%;padding:10px 12px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+.field-sm input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
+.field-sm input.mono{font-family:'DM Mono',monospace}
 
-/* PARCEL CARDS */
+.btn-submit{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:10px;transition:opacity .15s,transform .1s}
+.btn-submit:hover{opacity:.9}.btn-submit:active{transform:scale(.98)}.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+
+.form-toast{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:none}
+.form-toast.ok{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-light);display:block}
+.form-toast.err{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(192,57,43,.15);display:block}
+
 .parcel-list{display:flex;flex-direction:column;gap:8px}
 .p-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;animation:slideIn .2s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -73,91 +46,66 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .otp-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
 .otp-val{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 10px;border-radius:var(--radius-sm);letter-spacing:2px;margin-top:2px;display:inline-block}
 .otp-pending{font-size:12px;font-weight:500;color:var(--warn);background:var(--warn-bg);padding:5px 10px;border-radius:var(--radius-sm);border:1px solid rgba(184,134,11,.2);margin-top:2px;display:inline-block}
-.p-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.p-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);align-items:center}
 .meta{font-size:12px;color:var(--text3)}
 .meta strong{color:var(--text2);font-weight:500}
 .delivered-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent);display:inline-flex;align-items:center;gap:3px;margin-left:auto}
 .delivered-badge svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
-
 .empty{text-align:center;padding:2.5rem 1rem;color:var(--text3)}
 .empty svg{width:36px;height:36px;margin:0 auto 10px;display:block;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round}
 .empty p{font-size:13px}
-.toast-bar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:999;animation:fadeUp .3s ease;white-space:nowrap}
-.toast-bar.ok{background:var(--accent);color:#fff}
-.toast-bar.err{background:var(--danger);color:#fff}
 .loading{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
 @media(max-width:480px){.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:1}.main{padding:1rem}.topbar{padding:0 1rem}}
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
-<div class="screen active" id="s-auth">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="brand">
-        <div class="brand-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
-        <div><div class="brand-title">Parcel Portal</div><div class="brand-sub">Submit & track your parcels</div></div>
-      </div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="showAuthTab('login')">Sign In</button>
-        <button class="auth-tab" onclick="showAuthTab('register')">Register</button>
-      </div>
-
-      <!-- LOGIN -->
-      <div id="auth-login">
-        <div class="field"><label>Your Name</label><input type="text" id="l-name" placeholder="e.g. Rahul" autocomplete="off"/></div>
-        <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-        <div class="err-msg" id="l-err">Name or password incorrect.</div>
-        <button class="btn-full" onclick="doLogin()">Sign In</button>
-      </div>
-
-      <!-- REGISTER -->
-      <div id="auth-register" style="display:none">
-        <div class="field"><label>Full Name</label><input type="text" id="r-name" placeholder="e.g. Rahul Sharma" autocomplete="off"/></div>
-        <div class="field"><label>Set Password</label><input type="password" id="r-pw" placeholder="Choose a password"/></div>
-        <div class="field"><label>Confirm Password</label><input type="password" id="r-pw2" placeholder="Repeat password" onkeydown="if(event.key==='Enter')doRegister()"/></div>
-        <div class="err-msg" id="r-err">Passwords do not match.</div>
-        <button class="btn-full" onclick="doRegister()">Create Account</button>
-      </div>
-    </div>
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+    <div class="tb-title">Parcel Portal</div>
   </div>
 </div>
 
-<!-- MAIN SCREEN -->
-<div class="screen" id="s-main">
-  <div class="topbar">
-    <div class="topbar-brand">
-      <div class="tb-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
-      <div class="tb-title">Parcel Portal</div>
-    </div>
-    <div class="user-pill"><div class="u-avatar" id="u-av"></div><span id="u-name"></span></div>
-    <button class="btn-logout" onclick="doLogout()">Sign out</button>
-  </div>
-
-  <div class="main">
-    <!-- SUBMIT FORM -->
-    <div class="section-title" style="margin-bottom:10px">Submit a parcel</div>
-    <div class="form-card">
-      <div class="form-grid">
-        <div class="field-sm full"><label>Customer Name</label><input type="text" id="f-name" placeholder="Rahul Sharma" autocomplete="off"/></div>
-        <div class="field-sm full"><label>Tracking ID</label><input type="text" id="f-tracking" placeholder="FMPP4011928937" autocomplete="off" style="font-family:'DM Mono',monospace"/></div>
-        <div class="field-sm"><label>OTP</label><input type="text" id="f-otp" placeholder="603028" inputmode="numeric"/></div>
-        <div class="field-sm"><label>Last 4 Digits</label><input type="text" id="f-last4" placeholder="5598" inputmode="numeric" maxlength="4"/></div>
-        <div class="field-sm full"><label>Product Name</label><input type="text" id="f-product" placeholder="PS5, Nike Shoes…" autocomplete="off"/></div>
+<div class="main">
+  <div class="section-title" style="margin-bottom:10px">Submit a parcel</div>
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="field-sm full">
+        <label>Your Name</label>
+        <input type="text" id="f-submitter" placeholder="e.g. Rahul" autocomplete="off"/>
       </div>
-      <button class="btn-full" onclick="submitParcel()" id="submit-btn" style="margin-top:12px">Submit Parcel</button>
+      <div class="field-sm full">
+        <label>Name of Parcel</label>
+        <input type="text" id="f-name" placeholder="e.g. PS5, Nike Shoes" autocomplete="off"/>
+      </div>
+      <div class="field-sm full">
+        <label>Tracking ID</label>
+        <input type="text" id="f-tracking" class="mono" placeholder="FMPP4011928937" autocomplete="off" spellcheck="false"/>
+      </div>
+      <div class="field-sm">
+        <label>OTP</label>
+        <input type="text" id="f-otp" class="mono" placeholder="603028" inputmode="numeric"/>
+      </div>
+      <div class="field-sm">
+        <label>Last 4 Digits</label>
+        <input type="text" id="f-last4" class="mono" placeholder="5598" inputmode="numeric" maxlength="4"/>
+      </div>
+      <div class="field-sm full">
+        <label>Product Name</label>
+        <input type="text" id="f-product" placeholder="PS5, Nike Shoes…" autocomplete="off"/>
+      </div>
     </div>
-
-    <!-- MY PARCELS -->
-    <div class="section-title">My parcels</div>
-    <div id="my-parcels"><div class="loading">Loading…</div></div>
+    <button class="btn-submit" onclick="submitParcel()" id="submit-btn">Submit Parcel</button>
+    <div class="form-toast" id="f-toast"></div>
   </div>
+
+
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAWKEUcFGgEn20Uqc3pkHxzDuewO_FOW8w",
@@ -173,96 +121,47 @@ const db = getFirestore(app);
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-// Remember submitter name across page reloads
+// Remember submitter name
 try{
   const saved = localStorage.getItem('submitter_name');
   if(saved) document.getElementById('f-submitter').value = saved;
 }catch(e){}
 
-// Listen to recent parcels (last 30)
-const q = query(collection(db,'parcels'), orderBy('createdAt','desc'), limit(30));
-onSnapshot(q, snap => {
-  const parcels = snap.docs.map(d=>({id:d.id,...d.data()}));
-  renderParcels(parcels);
-});
 
-function renderParcels(parcels) {
-  const el = document.getElementById('my-parcels');
-  if(!parcels.length){
-    el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels submitted yet</p></div>`;
-    return;
-  }
-  el.innerHTML='<div class="parcel-list">'+parcels.map(p=>{
-    const hasOtp = p.otp && p.otp!=='—';
-    const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
-    return `<div class="p-card${p.delivered?' delivered':''}">
-      <div class="p-top">
-        <div>
-          <div class="p-name">${esc(p.customerName&&p.customerName!=='—'?p.customerName:'—')}</div>
-          <div class="p-product">${esc(p.product&&p.product!=='—'?p.product:'')}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:3px">by ${esc(p.userName||'—')}</div>
-        </div>
-        <div class="otp-box">
-          <div class="otp-lbl">OTP</div>
-          ${hasOtp ? `<div class="otp-val">${esc(p.otp)}</div>` : `<div class="otp-pending">Awaiting OTP</div>`}
-        </div>
-      </div>
-      <div class="p-meta">
-        <div class="meta" style="font-family:'DM Mono',monospace;font-size:11px"><strong>Tracking:</strong> ${esc(p.tracking)}</div>
-        ${p.last4&&p.last4!=='—'?`<div class="meta">Last 4: <strong>${esc(p.last4)}</strong></div>`:''}
-        <div class="meta" style="color:var(--text3)">${date}</div>
-        ${p.delivered?`<span class="delivered-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Delivered</span>`:''}
-      </div>
-    </div>`;
-  }).join('')+'</div>';
-}
-
-window.submitParcel = async function() {
+window.submitParcel = async function(){
   const submitterName = document.getElementById('f-submitter').value.trim();
-  const customerName = document.getElementById('f-name').value.trim();
-  const tracking = document.getElementById('f-tracking').value.trim();
-  const otp = document.getElementById('f-otp').value.trim();
-  const last4 = document.getElementById('f-last4').value.trim();
-  const product = document.getElementById('f-product').value.trim();
-  const toastEl = document.getElementById('f-toast');
-  toastEl.style.display='none';
+  const parcelName  = document.getElementById('f-name').value.trim();
+  const tracking      = document.getElementById('f-tracking').value.trim();
+  const otp           = document.getElementById('f-otp').value.trim();
+  const last4         = document.getElementById('f-last4').value.trim();
+  const product       = document.getElementById('f-product').value.trim();
+  const toastEl       = document.getElementById('f-toast');
+  toastEl.className   = 'form-toast';
 
-  if(!submitterName){
-    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
-    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Please enter your name.';return;
-  }
-  if(!tracking){
-    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
-    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Tracking ID is required.';return;
-  }
+  if(!submitterName){ toastEl.className='form-toast err'; toastEl.textContent='Please enter your name.'; return; }
+  if(!tracking){ toastEl.className='form-toast err'; toastEl.textContent='Tracking ID is required.'; return; }
 
-  // Save submitter name for next time
-  try{localStorage.setItem('submitter_name', submitterName)}catch(e){}
+  try{ localStorage.setItem('submitter_name', submitterName); }catch(e){}
 
   const btn = document.getElementById('submit-btn');
   btn.disabled=true; btn.textContent='Submitting…';
-  try {
+  try{
     await addDoc(collection(db,'parcels'),{
-      customerName: customerName||'—',
-      tracking,
-      otp: otp||'—',
-      last4: last4||'—',
-      product: product||'—',
-      userId: 'user',
-      userName: submitterName,
-      delivered: false,
-      createdAt: serverTimestamp()
+      parcelName: parcelName||'—', tracking,
+      otp: otp||'—', last4: last4||'—', product: product||'—',
+      userId: 'user', userName: submitterName,
+      delivered: false, createdAt: serverTimestamp()
     });
-    // Clear all except submitter name
     ['f-name','f-tracking','f-otp','f-last4','f-product'].forEach(id=>document.getElementById(id).value='');
-    toastEl.style.display='block';toastEl.style.background='var(--accent-bg)';toastEl.style.color='var(--accent)';
-    toastEl.style.border='1px solid var(--accent-light)';toastEl.textContent='✓ Parcel submitted successfully!';
-    setTimeout(()=>toastEl.style.display='none', 3000);
-  } catch(e){
-    toastEl.style.display='block';toastEl.style.background='var(--danger-bg)';toastEl.style.color='var(--danger)';
-    toastEl.style.border='1px solid rgba(192,57,43,.15)';toastEl.textContent='Error submitting. Please try again.';
+    toastEl.className='form-toast ok';
+    toastEl.textContent='✓ Parcel submitted!';
+    setTimeout(()=>toastEl.className='form-toast', 3000);
+  }catch(e){
+    toastEl.className='form-toast err';
+    toastEl.textContent='Error submitting. Please try again.';
   }
   btn.disabled=false; btn.textContent='Submit Parcel';
 }
 </script>
 </body>
+</html>
