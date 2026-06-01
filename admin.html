@@ -314,6 +314,55 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
+<script>
+// Exposed globals for onclick handlers
+var selectedAdminKey = null;
+var currentAdmin = null;
+
+var ADMINS = {
+  lakshya:   { name:'Lakshya',   password:'lakshya123',   color:'#1a6b3c', bg:'#e6f4ec', initials:'LH' },
+  deepanshu: { name:'Deepanshu', password:'deepanshu123', color:'#1a4a8a', bg:'#e6edf8', initials:'DH' },
+};
+
+function selectAdmin(key) {
+  selectedAdminKey = key;
+  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('uc-'+key)?.classList.add('selected');
+  document.getElementById('pw-wrap').classList.add('show');
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-err').classList.remove('show');
+  document.getElementById('pw-input').focus();
+}
+
+function doAdminLogin() {
+  if(!selectedAdminKey) return;
+  var admin = ADMINS[selectedAdminKey];
+  var pw = document.getElementById('pw-input').value;
+  var errEl = document.getElementById('pw-err');
+  if(pw === admin.password){
+    errEl.classList.remove('show');
+    currentAdmin = {key:selectedAdminKey, ...admin};
+    try{ sessionStorage.setItem('admin_sess', JSON.stringify({key:selectedAdminKey})); }catch(e){}
+    if(window._launchApp) window._launchApp();
+  } else {
+    errEl.classList.add('show');
+    document.getElementById('pw-input').classList.add('err');
+  }
+}
+
+function doLogout() {
+  try{ sessionStorage.removeItem('admin_sess'); }catch(e){}
+  currentAdmin = null; selectedAdminKey = null;
+  document.getElementById('pw-wrap').classList.remove('show');
+  document.getElementById('login-btn').disabled = true;
+  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('pw-input').value='';
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('app').style.display='none';
+}
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -330,50 +379,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ADMIN CREDENTIALS
-const ADMINS = {
-  lakshya:   { name:'Lakshya',   password:'lakshya123',   color:'#1a6b3c', bg:'#e6f4ec', initials:'LH' },
-  deepanshu: { name:'Deepanshu', password:'deepanshu123', color:'#1a4a8a', bg:'#e6edf8', initials:'DH' },
-};
-
-let currentAdmin = null;
+let currentAdmin_unused = null; // moved to global script
 let allParcels = [];
 let currentFilter = 'all';
 let unsubParcels = null;
 let unsubUsers = null;
-let selectedAdminKey = null;
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast-bar '+type;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
 
 // ── LOGIN ──
-window.selectAdmin = function(key) {
-  selectedAdminKey = key;
-  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('uc-'+key)?.classList.add('selected');
-  document.getElementById('pw-wrap').classList.add('show');
-  document.getElementById('login-btn').disabled = false;
-  document.getElementById('pw-input').value='';
-  document.getElementById('pw-err').classList.remove('show');
-  document.getElementById('pw-input').focus();
-}
-
-window.doAdminLogin = function() {
-  if(!selectedAdminKey)return;
-  const admin = ADMINS[selectedAdminKey];
-  const pw = document.getElementById('pw-input').value;
-  const errEl = document.getElementById('pw-err');
-  if(pw === admin.password){
-    errEl.classList.remove('show');
-    currentAdmin = {key:selectedAdminKey,...admin};
-    try{sessionStorage.setItem('admin_sess',JSON.stringify({key:selectedAdminKey}))}catch(e){}
-    launchApp();
-  } else {
-    errEl.classList.add('show');
-    document.getElementById('pw-input').classList.add('err');
-  }
-}
-
 window.doLogout = function() {
   try{sessionStorage.removeItem('admin_sess')}catch(e){}
   if(unsubParcels)unsubParcels();
@@ -388,7 +403,7 @@ window.doLogout = function() {
   switchTab('search');
 }
 
-function launchApp(){
+window._launchApp = function launchApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
   const pill=document.getElementById('pill-av');
@@ -711,7 +726,7 @@ try{
   if(sess?.key&&ADMINS[sess.key]){
     selectedAdminKey=sess.key;
     currentAdmin={key:sess.key,...ADMINS[sess.key]};
-    launchApp();
+    window._launchApp();
   }
 }catch(e){}
 </script>
