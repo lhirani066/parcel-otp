@@ -116,6 +116,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn-save-otp{padding:7px 14px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
 .btn-cancel-otp{padding:7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer}
 
+/* ADD FORM */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid .full{grid-column:1/-1}
+.field-sm label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.field-sm input,.field-sm select{width:100%;padding:9px 12px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
+.field-sm input:focus,.field-sm select:focus{border-color:var(--accent)}
+.field-sm select{font-family:'DM Sans',sans-serif}
+.btn-submit{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:4px;transition:opacity .15s,transform .1s;width:100%;justify-content:center}
+.btn-submit:hover{opacity:.9}.btn-submit:active{transform:scale(.98)}
+.btn-submit svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.form-toast{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:none}
+.form-toast.ok{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-light);display:block}
+.form-toast.err{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(192,57,43,.15);display:block}
+
 /* USERS TAB */
 .users-list{display:flex;flex-direction:column;gap:8px}
 .user-row-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px}
@@ -194,6 +209,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="tab" id="t-all" onclick="switchTab('all')">
       <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All Parcels
     </div>
+    <div class="tab" id="t-add" onclick="switchTab('add')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Parcel
+    </div>
     <div class="tab" id="t-users" onclick="switchTab('users')">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users
     </div>
@@ -225,6 +243,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="filter-btn" onclick="setFilter('delivered',this)">Delivered</button>
     </div>
     <div id="all-list"><div class="loading">Loading parcels…</div></div>
+  </div>
+
+  <!-- ADD PARCEL -->
+  <div class="panel" id="p-add">
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="field-sm full"><label>Customer Name</label><input type="text" id="a-custname" placeholder="Rahul Sharma" autocomplete="off"/></div>
+        <div class="field-sm full"><label>Tracking ID</label><input type="text" id="a-tracking" placeholder="FMPP4011928937" autocomplete="off"/></div>
+        <div class="field-sm"><label>OTP</label><input type="text" id="a-otp" placeholder="603028" inputmode="numeric"/></div>
+        <div class="field-sm"><label>Last 4 Digits</label><input type="text" id="a-last4" placeholder="5598" inputmode="numeric" maxlength="4"/></div>
+        <div class="field-sm full"><label>Product Name</label><input type="text" id="a-product" placeholder="PS5, Nike Shoes…" autocomplete="off"/></div>
+        <div class="field-sm full"><label>Assign to user (optional)</label><select id="a-user"><option value="">— Admin entry —</option></select></div>
+      </div>
+      <button class="btn-submit" onclick="adminAddParcel()" id="a-submit-btn">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Parcel
+      </button>
+      <div class="form-toast" id="a-toast"></div>
+    </div>
   </div>
 
   <!-- USERS -->
@@ -447,14 +484,55 @@ function renderAll(){
 }
 
 // ── USERS TAB ──
+let allUsers = [];
+
 window.switchTab = function(name){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('t-'+name)?.classList.add('active');
   document.getElementById('p-'+name)?.classList.add('active');
   if(name==='users')loadUsers();
+  if(name==='add')loadUsersForDropdown();
   if(name==='search')doSearch();
   if(name==='all')renderAll();
+}
+
+async function loadUsersForDropdown(){
+  const sel=document.getElementById('a-user');
+  if(!sel)return;
+  const snap=await getDocs(collection(db,'users'));
+  allUsers=snap.docs.map(d=>({id:d.id,...d.data()}));
+  sel.innerHTML='<option value="">— Admin entry —</option>'+allUsers.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
+}
+
+window.adminAddParcel = async function(){
+  const customerName=document.getElementById('a-custname').value.trim();
+  const tracking=document.getElementById('a-tracking').value.trim();
+  const otp=document.getElementById('a-otp').value.trim();
+  const last4=document.getElementById('a-last4').value.trim();
+  const product=document.getElementById('a-product').value.trim();
+  const userId=document.getElementById('a-user').value;
+  const toastEl=document.getElementById('a-toast');
+  toastEl.className='form-toast';
+  if(!customerName||!tracking){toastEl.className='form-toast err';toastEl.textContent='Customer name and tracking ID are required.';return}
+  const btn=document.getElementById('a-submit-btn');
+  btn.disabled=true;btn.childNodes[btn.childNodes.length-1].textContent=' Adding…';
+  const selectedUser=allUsers.find(u=>u.id===userId);
+  try{
+    const {addDoc,serverTimestamp}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await addDoc(collection(db,'parcels'),{
+      customerName,tracking,otp:otp||'—',last4:last4||'—',product:product||'—',
+      userId:userId||'admin',
+      userName:userId?selectedUser?.name||'Unknown':'Admin ('+currentAdmin.name+')',
+      delivered:false,
+      createdAt:serverTimestamp()
+    });
+    ['a-custname','a-tracking','a-otp','a-last4','a-product'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('a-user').value='';
+    toastEl.className='form-toast ok';
+    toastEl.textContent='✓ Parcel added successfully!';
+  }catch(e){toastEl.className='form-toast err';toastEl.textContent='Error adding parcel. Try again.'}
+  btn.disabled=false;btn.childNodes[btn.childNodes.length-1].textContent=' Add Parcel';
 }
 
 async function loadUsers(){
@@ -463,7 +541,6 @@ async function loadUsers(){
   const snap=await getDocs(collection(db,'users'));
   const users=snap.docs.map(d=>({id:d.id,...d.data()}));
   if(!users.length){container.innerHTML='<div class="empty"><p>No users registered yet</p></div>';return}
-  // Count parcels per user
   const counts={};
   allParcels.forEach(p=>{if(p.userId)counts[p.userId]=(counts[p.userId]||0)+1});
   container.innerHTML='<div class="users-list">'+users.map(u=>{
