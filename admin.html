@@ -10,7 +10,6 @@
 :root{--bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--text:#1a1a18;--text2:#6b6b65;--text3:#9b9b93;--accent:#1a6b3c;--accent-bg:#e6f4ec;--accent-light:#d0ebdb;--danger:#c0392b;--danger-bg:#fdf0ef;--warn:#b8860b;--warn-bg:#fdf6e3;--radius:12px;--radius-sm:8px;--shadow:0 2px 8px rgba(0,0,0,0.08),0 8px 24px rgba(0,0,0,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
-
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:360px;box-shadow:var(--shadow);animation:fadeUp .3s ease}
@@ -21,7 +20,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .brand-title{font-size:17px;font-weight:600}
 .brand-sub{font-size:12px;color:var(--text3);margin-top:2px}
 .user-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
-.u-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:.15s;background:var(--surface)}
+.u-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:.15s;background:var(--surface);user-select:none}
 .u-card:hover{border-color:var(--border2);background:var(--surface2)}
 .u-card.selected{border-color:var(--accent);background:var(--accent-bg)}
 .u-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
@@ -30,17 +29,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .u-card.selected .u-check{background:var(--accent);border-color:var(--accent)}
 .u-check svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;display:none}
 .u-card.selected .u-check svg{display:block}
-.pw-wrap{display:none}.pw-wrap.show{display:block;animation:fadeUp .2s ease}
-.pw-lbl{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.pw-section{display:none;margin-bottom:.5rem}
+.pw-section.show{display:block;animation:fadeUp .2s ease}
+.pw-label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
 .pw-input{width:100%;padding:11px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;border:1.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:.15s}
 .pw-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
-.pw-input.err{border-color:var(--danger)}
 .pw-err{font-size:12px;color:var(--danger);margin-top:5px;display:none}
 .pw-err.show{display:block}
-.btn-login{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:12px;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-login:hover{opacity:.9}.btn-login:active{transform:scale(.98)}.btn-login:disabled{opacity:.5;cursor:not-allowed}
-.btn-login svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
-
+.btn-login{width:100%;padding:12px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:10px;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-login:hover{opacity:.9}.btn-login:disabled{opacity:.5;cursor:not-allowed}
 /* APP */
 #app{display:none}
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
@@ -56,7 +53,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .pill-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .btn-out{padding:5px 10px;font-size:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:.15s}
 .btn-out:hover{color:var(--danger);border-color:rgba(192,57,43,.3);background:var(--danger-bg)}
-
 .tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 1rem;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:11px 14px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;display:flex;align-items:center;gap:5px;margin-bottom:-1px}
@@ -65,7 +61,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .tab:hover:not(.active){color:var(--text)}
 .panel{display:none;padding:1.25rem;max-width:800px;margin:0 auto;width:100%}
 .panel.active{display:block}
-
 /* SEARCH */
 .search-wrap{position:relative;margin-bottom:1rem}
 .s-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
@@ -73,7 +68,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .search-input{width:100%;padding:12px 12px 12px 38px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);outline:none;transition:.15s}
 .search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.12)}
 .search-input::placeholder{color:var(--text3)}
-
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;text-align:center}
 .stat-num{font-size:24px;font-weight:600;line-height:1}
@@ -81,8 +75,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .stat-card.green .stat-num{color:var(--accent)}
 .stat-card.gray .stat-num{color:var(--text3)}
 .stat-card.warn .stat-num{color:var(--warn)}
-
-/* PARCEL CARDS */
+/* CARDS */
 .parcel-list{display:flex;flex-direction:column;gap:8px}
 .p-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;animation:slideIn .2s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -91,60 +84,54 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .p-left{flex:1;min-width:0}
 .p-name{font-size:15px;font-weight:600}
 .p-product{font-size:13px;color:var(--text2);margin-top:2px}
-.p-submitter{font-size:11px;color:var(--text3);margin-top:3px;display:flex;align-items:center;gap:3px}
-.p-submitter svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.p-by{font-size:11px;color:var(--text3);margin-top:3px;display:flex;align-items:center;gap:3px}
+.p-by svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .otp-block{text-align:right;flex-shrink:0}
 .otp-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
-.otp-val{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 12px;border-radius:var(--radius-sm);letter-spacing:3px;margin-top:2px;display:inline-block}
-.otp-pending{font-size:12px;font-weight:500;color:var(--warn);background:var(--warn-bg);padding:5px 10px;border-radius:var(--radius-sm);border:1px solid rgba(184,134,11,.2);margin-top:2px;display:inline-block;cursor:pointer;transition:.15s}
-.otp-pending:hover{background:#fef0c0}
+.otp-val{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 12px;border-radius:var(--radius-sm);letter-spacing:3px;margin-top:2px;display:inline-block;cursor:pointer}
+.otp-pending{font-size:12px;font-weight:500;color:var(--warn);background:var(--warn-bg);padding:5px 10px;border-radius:var(--radius-sm);border:1px solid rgba(184,134,11,.2);margin-top:2px;display:inline-block;cursor:pointer}
 .p-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 .meta{font-size:12px;color:var(--text3)}
-.meta strong{color:var(--text2);font-weight:500}
+.meta strong{color:var(--text);font-weight:600;font-size:13px}
 .meta.mono{font-family:'DM Mono',monospace;font-size:11px}
-.btn-delete{font-size:12px;padding:5px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;transition:.15s}
-.btn-delete:hover{background:var(--danger-bg);color:var(--danger);border-color:rgba(192,57,43,.2)}
 .btn-deliver{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s;font-family:'Plus Jakarta Sans',sans-serif}
 .btn-deliver svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .btn-deliver:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-light)}
+.btn-delete{font-size:12px;padding:5px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;transition:.15s}
+.btn-delete svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.btn-delete:hover{background:var(--danger-bg);color:var(--danger);border-color:rgba(192,57,43,.2)}
 .delivered-badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent);display:inline-flex;align-items:center;gap:3px}
 .delivered-badge svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
-
-/* OTP EDIT INLINE */
 .otp-edit{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .otp-edit.open{display:flex;gap:6px;align-items:center}
 .otp-edit input{flex:1;padding:7px 10px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;letter-spacing:2px}
 .otp-edit input:focus{border-color:var(--accent)}
 .btn-save-otp{padding:7px 14px;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
 .btn-cancel-otp{padding:7px 10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer}
-
+/* ADD FORM */
 .mode-btn{padding:8px 16px;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;transition:.15s}
 .mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.hint-box{background:#fdf6e3;border:1px solid rgba(184,134,11,.2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:12px;line-height:1.7}
+.hint-box{background:var(--warn-bg);border:1px solid rgba(184,134,11,.2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:12px;line-height:1.7}
 .hint-box strong{font-weight:600}
 .hint-box code{font-family:'DM Mono',monospace;background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:12px}
-/* ADD FORM */
-.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-grid .full{grid-column:1/-1}
-.field-sm label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-.field-sm input,.field-sm select{width:100%;padding:9px 12px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
-.field-sm input:focus,.field-sm select:focus{border-color:var(--accent)}
-.field-sm select{font-family:'Plus Jakarta Sans',sans-serif}
-.btn-submit{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:4px;transition:opacity .15s,transform .1s;width:100%;justify-content:center}
-.btn-submit:hover{opacity:.9}.btn-submit:active{transform:scale(.98)}
+.paste-area{width:100%;min-height:160px;padding:14px;font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);resize:vertical;outline:none;transition:.15s}
+.paste-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
+.btn-submit{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px 22px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:10px;transition:opacity .15s}
+.btn-submit:hover{opacity:.9}.btn-submit:disabled{opacity:.5;cursor:not-allowed}
 .btn-submit svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
 .form-toast{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:none}
 .form-toast.ok{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-light);display:block}
 .form-toast.err{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(192,57,43,.15);display:block}
-
-/* USERS TAB */
+/* FILTERS */
+.filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 12px;font-size:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.15s}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* USERS */
 .users-list{display:flex;flex-direction:column;gap:8px}
 .user-row-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px}
 .ur-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
 .ur-info{flex:1}.ur-name{font-size:14px;font-weight:600}.ur-meta{font-size:12px;color:var(--text3);margin-top:2px}
 .ur-count{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--surface2);color:var(--text2)}
-
 .empty{text-align:center;padding:2.5rem 1rem;color:var(--text3)}
 .empty svg{width:36px;height:36px;margin:0 auto 10px;display:block;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round}
 .empty p{font-size:14px}
@@ -152,15 +139,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .toast-bar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:999;animation:fadeUp .3s ease;white-space:nowrap}
 .toast-bar.ok{background:var(--accent);color:#fff}
 .toast-bar.err{background:var(--danger);color:#fff}
-.filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.filter-btn{padding:6px 12px;font-size:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.15s}
-.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}.chips{display:none}.topbar{padding:0 1rem}.panel{padding:1rem}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-wrap">
     <div class="login-card">
@@ -169,31 +152,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <div><div class="brand-title">Admin Panel</div><div class="brand-sub">Parcel OTP Manager</div></div>
       </div>
       <div class="user-grid">
-        <div class="u-card" id="uc-lakshya" onclick="selectAdmin('lakshya')">
+        <div class="u-card" id="uc-lakshya" onclick="selectUser('lakshya')">
           <div class="u-avatar" style="background:#e6f4ec;color:#1a6b3c">LH</div>
           <div class="u-info"><div class="u-name">Lakshya</div><div class="u-role">Super Admin</div></div>
           <div class="u-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         </div>
-        <div class="u-card" id="uc-deepanshu" onclick="selectAdmin('deepanshu')">
+        <div class="u-card" id="uc-deepanshu" onclick="selectUser('deepanshu')">
           <div class="u-avatar" style="background:#e6edf8;color:#1a4a8a">DH</div>
           <div class="u-info"><div class="u-name">Deepanshu</div><div class="u-role">Admin</div></div>
           <div class="u-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         </div>
       </div>
-      <div class="pw-wrap" id="pw-wrap">
-        <div class="pw-lbl">Password</div>
-        <input class="pw-input" type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+      <div class="pw-section" id="pw-section">
+        <div class="pw-label">Password</div>
+        <input class="pw-input" type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"/>
         <div class="pw-err" id="pw-err">Incorrect password. Try again.</div>
       </div>
-      <button class="btn-login" id="login-btn" onclick="doAdminLogin()" disabled>
-        <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Sign In
-      </button>
+      <button class="btn-login" id="login-btn" onclick="doLogin()" disabled>Sign In</button>
     </div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="topbar">
     <div class="tb-brand">
@@ -210,25 +189,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 
   <div class="tabs">
-    <div class="tab active" id="t-search" onclick="switchTab('search')">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search
-    </div>
-    <div class="tab" id="t-all" onclick="switchTab('all')">
-      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All Parcels
-    </div>
-    <div class="tab" id="t-add" onclick="switchTab('add')">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Parcel
-    </div>
-    <div class="tab" id="t-users" onclick="switchTab('users')">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users
-    </div>
+    <div class="tab active" id="t-search" onclick="switchTab('search')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search</div>
+    <div class="tab" id="t-all" onclick="switchTab('all')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All Parcels</div>
+    <div class="tab" id="t-add" onclick="switchTab('add')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Parcel</div>
+    <div class="tab" id="t-users" onclick="switchTab('users')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users</div>
   </div>
 
   <!-- SEARCH -->
   <div class="panel active" id="p-search">
     <div class="search-wrap">
       <div class="s-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <input class="search-input" id="searchInput" type="text" placeholder="Type tracking ID, customer name, or last 4 digits…" oninput="doSearch()" autocomplete="off" spellcheck="false"/>
+      <input class="search-input" id="searchInput" type="text" placeholder="Type tracking ID, name, OTP or last 4 digits…" oninput="doSearch()" autocomplete="off" spellcheck="false"/>
     </div>
     <div class="stat-row">
       <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total</div></div>
@@ -236,9 +207,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="stat-card gray"><div class="stat-num" id="st-delivered">0</div><div class="stat-lbl">Delivered</div></div>
       <div class="stat-card warn"><div class="stat-num" id="st-nootp">0</div><div class="stat-lbl">No OTP</div></div>
     </div>
-    <div id="search-results">
-      <div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search any parcel above</p></div>
-    </div>
+    <div id="search-results"><div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search any parcel above</p></div></div>
   </div>
 
   <!-- ALL -->
@@ -248,60 +217,39 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
       <button class="filter-btn" onclick="setFilter('nootp',this)">No OTP</button>
       <button class="filter-btn" onclick="setFilter('delivered',this)">Delivered</button>
-      <button class="filter-btn" onclick="clearAllDelivered()" style="margin-left:auto;color:var(--danger);border-color:rgba(192,57,43,.3)" onmouseover="this.style.background='var(--danger-bg)'" onmouseout="this.style.background=''">
-        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;display:inline;vertical-align:-2px;margin-right:3px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-        Clear delivered
-      </button>
+      <button class="filter-btn" onclick="clearAllDelivered()" style="margin-left:auto;color:var(--danger);border-color:rgba(192,57,43,.3)">🗑 Clear delivered</button>
     </div>
     <div class="search-wrap" style="margin-bottom:10px">
       <div class="s-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <input class="search-input" id="allSearchInput" type="text" placeholder="Search in all parcels…" oninput="renderAll()" autocomplete="off" spellcheck="false"/>
+      <input class="search-input" id="allSearchInput" type="text" placeholder="Search in all parcels…" oninput="renderAll()" autocomplete="off"/>
     </div>
-    <div id="all-list"><div class="loading">Loading parcels…</div></div>
+    <div id="all-list"><div class="loading">Loading…</div></div>
   </div>
 
-  <!-- ADD PARCEL -->
+  <!-- ADD -->
   <div class="panel" id="p-add">
+    <div style="background:var(--surface2);border:1.5px dashed var(--accent-light);border-radius:var(--radius);padding:1rem;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">⚡ Smart Paste — AI fills the form</div>
+      <div style="display:flex;gap:8px">
+        <textarea id="a-smart-input" rows="3" style="flex:1;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);resize:none;outline:none;line-height:1.6" placeholder="Paste WhatsApp OTP message here…"></textarea>
+        <button onclick="adminSmartParse()" id="a-smart-btn" style="padding:0 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">⚡ Parse</button>
+      </div>
+      <div id="a-smart-status" style="font-size:12px;margin-top:6px;display:none"></div>
+    </div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <button class="mode-btn active" id="mode-tracking" onclick="setAddMode('tracking')">Tracking IDs only</button>
       <button class="mode-btn" id="mode-full" onclick="setAddMode('full')">Full details (with OTP)</button>
     </div>
-
-    <div class="hint-box" id="hint-tracking">
-      <strong>Paste tracking IDs from WhatsApp</strong> — one per line or all together. Works with FMPP, SF, AMZN and all formats. Duplicates are skipped automatically.
-    </div>
-    <div class="hint-box" id="hint-full" style="display:none">
-      <strong>Paste full OTP messages</strong> — each parcel needs 5 lines:<br>
-      <code>Customer Name</code> → <code>Tracking ID</code> → <code>OTP</code> → <code>Last 4 digits</code> → <code>Product name</code><br>
-      Separate multiple parcels with a blank line. If tracking already exists, OTP details will be updated automatically.
-    </div>
-
-    <!-- SMART PASTE -->
-    <div style="background:var(--surface2);border:1.5px dashed var(--accent-light);border-radius:var(--radius);padding:1rem;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        <span style="font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px">Smart Paste</span>
-        <span style="font-size:11px;color:var(--text3);margin-left:2px">— paste any WhatsApp message, AI fills the form</span>
-      </div>
-      <div style="display:flex;gap:8px">
-        <textarea id="a-smart-input" rows="3" style="flex:1;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);resize:none;outline:none;line-height:1.6" placeholder="Paste WhatsApp OTP message here…"></textarea>
-        <button onclick="adminSmartParse()" id="a-smart-btn" style="padding:0 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:.15s">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Parse
-        </button>
-      </div>
-      <div id="a-smart-status" style="font-size:12px;margin-top:6px;display:none"></div>
-    </div>
-
+    <div class="hint-box" id="hint-tracking">Paste tracking IDs from WhatsApp — one per line. Works with FMPP, SF, AMZN etc.</div>
+    <div class="hint-box" id="hint-full" style="display:none"><strong>5 lines per parcel:</strong> <code>Name</code> → <code>Tracking</code> → <code>OTP</code> → <code>Last 4</code> → <code>Product</code>. Blank line between parcels.</div>
     <div style="margin-bottom:10px">
-      <label style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Assign to user (optional)</label>
+      <label style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Assign to user (optional)</label>
       <select id="a-user" style="width:100%;padding:9px 12px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none">
         <option value="">— Admin entry —</option>
       </select>
     </div>
-
-    <textarea id="a-paste" style="width:100%;min-height:180px;padding:14px;font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);resize:vertical;outline:none;transition:.15s" placeholder="SF3202034025F&#10;FMPP4049330150&#10;FMPP4049619164" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
-
-    <button class="btn-submit" onclick="adminPasteParcels()" id="a-submit-btn" style="margin-top:10px">
+    <textarea id="a-paste" class="paste-area" placeholder="SF3202034025F&#10;FMPP4049330150&#10;FMPP4049619164"></textarea>
+    <button class="btn-submit" onclick="adminPasteParcels()" id="a-submit-btn">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Import Parcels
     </button>
@@ -315,57 +263,71 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <script>
-// Exposed globals for onclick handlers
-var selectedAdminKey = null;
-var currentAdmin = null;
-
+// ── CONFIG ──
 var ADMINS = {
-  lakshya:   { name:'Lakshya',   password:'lakshya123',   color:'#1a6b3c', bg:'#e6f4ec', initials:'LH' },
-  deepanshu: { name:'Deepanshu', password:'deepanshu123', color:'#1a4a8a', bg:'#e6edf8', initials:'DH' },
+  lakshya:   {name:'Lakshya',   password:'lakshya123',   color:'#1a6b3c', bg:'#e6f4ec', initials:'LH'},
+  deepanshu: {name:'Deepanshu', password:'deepanshu123', color:'#1a4a8a', bg:'#e6edf8', initials:'DH'}
 };
+var _selectedKey = null;
+var _currentAdmin = null;
 
-function selectAdmin(key) {
-  selectedAdminKey = key;
-  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('uc-'+key)?.classList.add('selected');
-  document.getElementById('pw-wrap').classList.add('show');
+function selectUser(key) {
+  _selectedKey = key;
+  document.querySelectorAll('.u-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('uc-' + key).classList.add('selected');
+  document.getElementById('pw-section').classList.add('show');
   document.getElementById('login-btn').disabled = false;
-  document.getElementById('pw-input').value='';
+  document.getElementById('pw-input').value = '';
   document.getElementById('pw-err').classList.remove('show');
-  document.getElementById('pw-input').focus();
+  setTimeout(() => document.getElementById('pw-input').focus(), 50);
 }
 
-function doAdminLogin() {
-  if(!selectedAdminKey) return;
-  var admin = ADMINS[selectedAdminKey];
+function doLogin() {
+  if (!_selectedKey) return;
   var pw = document.getElementById('pw-input').value;
-  var errEl = document.getElementById('pw-err');
-  if(pw === admin.password){
-    errEl.classList.remove('show');
-    currentAdmin = {key:selectedAdminKey, ...admin};
-    try{ sessionStorage.setItem('admin_sess', JSON.stringify({key:selectedAdminKey})); }catch(e){}
-    if(window._launchApp) window._launchApp();
+  var admin = ADMINS[_selectedKey];
+  if (pw === admin.password) {
+    _currentAdmin = {key: _selectedKey, ...admin};
+    try { sessionStorage.setItem('admin_sess', JSON.stringify({key: _selectedKey})); } catch(e) {}
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    setupApp();
   } else {
-    errEl.classList.add('show');
-    document.getElementById('pw-input').classList.add('err');
+    document.getElementById('pw-err').classList.add('show');
+    document.getElementById('pw-input').focus();
   }
 }
 
 function doLogout() {
-  try{ sessionStorage.removeItem('admin_sess'); }catch(e){}
-  currentAdmin = null; selectedAdminKey = null;
-  document.getElementById('pw-wrap').classList.remove('show');
+  try { sessionStorage.removeItem('admin_sess'); } catch(e) {}
+  _currentAdmin = null; _selectedKey = null;
+  document.getElementById('pw-section').classList.remove('show');
   document.getElementById('login-btn').disabled = true;
-  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('pw-input').value='';
-  document.getElementById('login-screen').style.display='block';
-  document.getElementById('app').style.display='none';
+  document.querySelectorAll('.u-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-err').classList.remove('show');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
 }
+
+// Auto session restore
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    var sess = JSON.parse(sessionStorage.getItem('admin_sess') || 'null');
+    if (sess && sess.key && ADMINS[sess.key]) {
+      _selectedKey = sess.key;
+      _currentAdmin = {key: sess.key, ...ADMINS[sess.key]};
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      setupApp();
+    }
+  } catch(e) {}
+});
 </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAWKEUcFGgEn20Uqc3pkHxzDuewO_FOW8w",
@@ -379,356 +341,277 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let currentAdmin_unused = null; // moved to global script
 let allParcels = [];
+let allUsers = [];
 let currentFilter = 'all';
+let addMode = 'tracking';
 let unsubParcels = null;
-let unsubUsers = null;
 
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast-bar '+type;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toast(msg, type='ok') { const t=document.createElement('div'); t.className='toast-bar '+type; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+function last4Display(v) { return String(v||'').replace(/[^0-9]/g,'').slice(-4); }
 
-// ── LOGIN ──
-window.doLogout = function() {
-  try{sessionStorage.removeItem('admin_sess')}catch(e){}
-  if(unsubParcels)unsubParcels();
-  if(unsubUsers)unsubUsers();
-  currentAdmin=null; selectedAdminKey=null;
-  document.getElementById('pw-wrap').classList.remove('show');
-  document.getElementById('login-btn').disabled=true;
-  document.querySelectorAll('.u-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('pw-input').value='';
-  document.getElementById('login-screen').style.display='block';
-  document.getElementById('app').style.display='none';
-  switchTab('search');
-}
-
-window._launchApp = function launchApp(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
-  const pill=document.getElementById('pill-av');
-  pill.textContent=currentAdmin.initials;
-  pill.style.background=currentAdmin.bg;
-  pill.style.color=currentAdmin.color;
-  document.getElementById('pill-name').textContent=currentAdmin.name;
-  listenParcels();
-}
-
-// ── REAL TIME PARCELS ──
-function listenParcels(){
-  if(unsubParcels)unsubParcels();
-  unsubParcels = onSnapshot(collection(db,'parcels'), snap=>{
-    allParcels = snap.docs.map(d=>({id:d.id,...d.data()}));
+window.setupApp = function() {
+  const a = _currentAdmin;
+  if (!a) return;
+  const av = document.getElementById('pill-av');
+  av.textContent = a.initials;
+  av.style.background = a.bg;
+  av.style.color = a.color;
+  document.getElementById('pill-name').textContent = a.name;
+  if (unsubParcels) unsubParcels();
+  unsubParcels = onSnapshot(collection(db, 'parcels'), snap => {
+    allParcels = snap.docs.map(d => ({id: d.id, ...d.data()}));
     updateStats();
     doSearch();
     renderAll();
   });
 }
 
-function updateStats(){
-  const total=allParcels.length;
-  const delivered=allParcels.filter(p=>p.delivered).length;
-  const pending=total-delivered;
-  const nootp=allParcels.filter(p=>!p.delivered&&(!p.otp||p.otp==='—')).length;
-  ['st-total','c-total'].forEach(id=>document.getElementById(id)&&(document.getElementById(id).textContent=id.startsWith('c')?total+' total':total));
-  ['st-pending'].forEach(id=>document.getElementById(id)&&(document.getElementById(id).textContent=pending));
-  document.getElementById('c-pending').textContent=pending+' pending';
-  ['st-delivered'].forEach(id=>document.getElementById(id)&&(document.getElementById(id).textContent=delivered));
-  ['st-nootp'].forEach(id=>document.getElementById(id)&&(document.getElementById(id).textContent=nootp));
-  document.getElementById('c-nootp').textContent=nootp+' no OTP';
+function updateStats() {
+  const total = allParcels.length;
+  const delivered = allParcels.filter(p=>p.delivered).length;
+  const pending = total - delivered;
+  const nootp = allParcels.filter(p=>!p.delivered&&(!p.otp||p.otp==='—')).length;
+  document.getElementById('st-total').textContent = total;
+  document.getElementById('st-pending').textContent = pending;
+  document.getElementById('st-delivered').textContent = delivered;
+  document.getElementById('st-nootp').textContent = nootp;
+  document.getElementById('c-total').textContent = total + ' total';
+  document.getElementById('c-pending').textContent = pending + ' pending';
+  document.getElementById('c-nootp').textContent = nootp + ' no OTP';
 }
 
-// ── CARD HTML ──
-function cardHTML(p){
-  const hasOtp=p.otp&&p.otp!=='—';
-  const date=p.createdAt?.toDate?p.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+function cardHTML(p) {
+  const hasOtp = p.otp && p.otp !== '—';
+  const name = p.parcelName || p.customerName || '—';
+  const l4 = last4Display(p.last4);
+  const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
   return `<div class="p-card${p.delivered?' delivered':''}" id="pc-${p.id}">
     <div class="p-top">
       <div class="p-left">
-        <div class="p-name">${esc(p.parcelName||p.customerName||'—')}</div>
+        <div class="p-name">${esc(name)}</div>
         ${p.product&&p.product!=='—'?`<div class="p-product">${esc(p.product)}</div>`:''}
-        <div class="p-submitter"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${esc(p.userName||'Unknown')}</div>
+        <div class="p-by"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${esc(p.userName||'Unknown')}</div>
       </div>
       <div class="otp-block">
         <div class="otp-lbl">OTP</div>
         ${hasOtp
-          ? `<div class="otp-val" title="Click to edit" onclick="toggleOtpEdit('${p.id}')" style="cursor:pointer">${esc(p.otp)}</div>`
+          ? `<div class="otp-val" onclick="toggleOtpEdit('${p.id}')" title="Click to edit">${esc(p.otp)}</div>`
           : `<div class="otp-pending" onclick="toggleOtpEdit('${p.id}')">+ Add OTP</div>`}
       </div>
     </div>
     <div class="otp-edit" id="oe-${p.id}">
-      <input type="text" id="oi-${p.id}" placeholder="Enter OTP" value="${esc(p.otp&&p.otp!=='—'?p.otp:'')}" inputmode="numeric" onkeydown="if(event.key==='Enter')saveOtp('${p.id}')"/>
+      <input type="text" id="oi-${p.id}" placeholder="Enter OTP" value="${esc(hasOtp?p.otp:'')}" inputmode="numeric" onkeydown="if(event.key==='Enter')saveOtp('${p.id}')"/>
       <button class="btn-save-otp" onclick="saveOtp('${p.id}')">Save</button>
       <button class="btn-cancel-otp" onclick="toggleOtpEdit('${p.id}')">Cancel</button>
     </div>
     <div class="p-meta">
       <div class="meta mono"><strong>Tracking:</strong> ${esc(p.tracking)}</div>
-      ${p.last4&&p.last4!=='—'?`<div class="meta">Last 4: <strong style="font-size:14px;color:var(--text)">${esc(String(p.last4).replace(/[^0-9]/g,'').slice(-4))}</strong></div>`:''}
+      ${l4?`<div class="meta">Last 4: <strong>${esc(l4)}</strong></div>`:''}
       <div class="meta">${date}</div>
       <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
         ${p.delivered
           ? `<span class="delivered-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Delivered</span>`
           : `<button class="btn-deliver" onclick="markDelivered('${p.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Mark delivered</button>`}
-        <button class="btn-delete" onclick="deleteParcel('${p.id}')" title="Delete entry">
-          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-        </button>
+        <button class="btn-delete" onclick="deleteParcel('${p.id}')" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
       </div>
     </div>
   </div>`;
 }
 
-// ── OTP EDIT ──
-window.toggleOtpEdit = function(id){
-  const el=document.getElementById('oe-'+id);
-  const isOpen=el.classList.contains('open');
-  document.querySelectorAll('.otp-edit').forEach(e=>e.classList.remove('open'));
-  if(!isOpen){el.classList.add('open');document.getElementById('oi-'+id)?.focus();}
-}
-
-window.saveOtp = async function(id){
-  const val=document.getElementById('oi-'+id)?.value.trim();
-  if(!val)return;
-  try{
-    await updateDoc(doc(db,'parcels',id),{otp:val});
-    toast('OTP updated!');
-    document.getElementById('oe-'+id)?.classList.remove('open');
-  }catch(e){toast('Error saving OTP','err')}
-}
-
-// ── MARK DELIVERED ──
-window.markDelivered = async function(id){
-  try{
-    await updateDoc(doc(db,'parcels',id),{delivered:true});
-    toast('Marked as delivered!');
-  }catch(e){toast('Error updating','err')}
-}
-
-window.deleteParcel = async function(id){
-  if(!confirm('Delete this parcel entry? This cannot be undone.')) return;
-  try{
-    await deleteDoc(doc(db,'parcels',id));
-    toast('Entry deleted.');
-  }catch(e){toast('Error deleting','err')}
-}
-
-window.clearAllDelivered = async function(){
-  const delivered = allParcels.filter(p=>p.delivered);
-  if(!delivered.length){toast('No delivered parcels to clear.','err');return}
-  if(!confirm(`Delete all ${delivered.length} delivered parcel(s)? This cannot be undone.`)) return;
-  try{
-    await Promise.all(delivered.map(p=>deleteDoc(doc(db,'parcels',p.id))));
-    toast(`✓ ${delivered.length} delivered parcels cleared.`);
-  }catch(e){toast('Error clearing','err')}
-}
-
-// ── SEARCH ──
-window.doSearch = function(){
-  const q=(document.getElementById('searchInput')?.value||'').trim().toLowerCase();
-  const container=document.getElementById('search-results');
-  if(!container)return;
-  if(!q){container.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search by tracking ID, name, or last 4 digits</p></div>`;return}
-  const hits=allParcels.filter(p=>
-    (p.tracking||'').toLowerCase().includes(q)||
-    (p.parcelName||p.customerName||'').toLowerCase().includes(q)||
-    (p.last4||'').includes(q)||
-    (p.otp||'').includes(q)||
-    (p.product||'').toLowerCase().includes(q)||
-    (p.userName||'').toLowerCase().includes(q)
+window.doSearch = function() {
+  const q = (document.getElementById('searchInput')?.value||'').trim().toLowerCase();
+  const container = document.getElementById('search-results');
+  if (!container) return;
+  if (!q) { container.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search by tracking ID, name, OTP or last 4</p></div>`; return; }
+  const hits = allParcels.filter(p =>
+    (p.tracking||'').toLowerCase().includes(q) ||
+    (p.parcelName||p.customerName||'').toLowerCase().includes(q) ||
+    (p.userName||'').toLowerCase().includes(q) ||
+    (p.otp||'').includes(q) ||
+    last4Display(p.last4).includes(q)
   );
-  if(!hits.length){container.innerHTML=`<div class="empty"><p>No parcels found for "<strong>${esc(q)}</strong>"</p></div>`;return}
-  container.innerHTML='<div class="parcel-list">'+hits.map(cardHTML).join('')+'</div>';
+  container.innerHTML = hits.length
+    ? '<div class="parcel-list">'+hits.map(cardHTML).join('')+'</div>'
+    : `<div class="empty"><p>No results for "<strong>${esc(q)}</strong>"</p></div>`;
 }
 
-// ── ALL ──
-window.setFilter = function(f,btn){
-  currentFilter=f;
+window.renderAll = function() {
+  const container = document.getElementById('all-list');
+  if (!container) return;
+  const sq = (document.getElementById('allSearchInput')?.value||'').toLowerCase().trim();
+  let list = [...allParcels];
+  if (currentFilter==='pending') list = list.filter(p=>!p.delivered);
+  else if (currentFilter==='nootp') list = list.filter(p=>!p.delivered&&(!p.otp||p.otp==='—'));
+  else if (currentFilter==='delivered') list = list.filter(p=>p.delivered);
+  if (sq) list = list.filter(p=>
+    (p.tracking||'').toLowerCase().includes(sq)||
+    (p.parcelName||p.customerName||'').toLowerCase().includes(sq)||
+    (p.userName||'').toLowerCase().includes(sq)||
+    (p.otp||'').includes(sq)||
+    last4Display(p.last4).includes(sq)
+  );
+  list.sort((a,b)=>{ if(a.delivered!==b.delivered)return a.delivered?1:-1; return (b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0); });
+  container.innerHTML = list.length
+    ? '<div class="parcel-list">'+list.map(cardHTML).join('')+'</div>'
+    : `<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels here</p></div>`;
+}
+
+window.setFilter = function(f, btn) {
+  currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderAll();
 }
 
-window.renderAll = function(){
-  const container=document.getElementById('all-list');
-  if(!container)return;
-  const sq=(document.getElementById('allSearchInput')?.value||'').toLowerCase().trim();
-  let list=[...allParcels];
-  if(currentFilter==='pending')list=list.filter(p=>!p.delivered);
-  else if(currentFilter==='nootp')list=list.filter(p=>!p.delivered&&(!p.otp||p.otp==='—'));
-  else if(currentFilter==='delivered')list=list.filter(p=>p.delivered);
-  if(sq)list=list.filter(p=>
-    (p.tracking||'').toLowerCase().includes(sq)||
-    (p.parcelName||p.customerName||'').toLowerCase().includes(sq)||
-    (p.userName||'').toLowerCase().includes(sq)||
-    (p.otp||'').includes(sq)||
-    String(p.last4||'').slice(-4).includes(sq)
-  );
-  list.sort((a,b)=>{
-    if(a.delivered!==b.delivered)return a.delivered?1:-1;
-    const at=a.createdAt?.toMillis?.()||0,bt=b.createdAt?.toMillis?.()||0;
-    return bt-at;
-  });
-  if(!list.length){container.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels here</p></div>`;return}
-  container.innerHTML='<div class="parcel-list">'+list.map(cardHTML).join('')+'</div>';
+window.toggleOtpEdit = function(id) {
+  const el = document.getElementById('oe-'+id);
+  const open = el.classList.contains('open');
+  document.querySelectorAll('.otp-edit').forEach(e=>e.classList.remove('open'));
+  if (!open) { el.classList.add('open'); document.getElementById('oi-'+id)?.focus(); }
 }
 
-// ── USERS TAB ──
-let allUsers = [];
+window.saveOtp = async function(id) {
+  const val = document.getElementById('oi-'+id)?.value.trim();
+  if (!val) return;
+  try { await updateDoc(doc(db,'parcels',id),{otp:val}); toast('OTP saved!'); document.getElementById('oe-'+id)?.classList.remove('open'); }
+  catch(e) { toast('Error saving','err'); }
+}
 
-window.switchTab = function(name){
+window.markDelivered = async function(id) {
+  try { await updateDoc(doc(db,'parcels',id),{delivered:true}); toast('Marked delivered!'); }
+  catch(e) { toast('Error updating','err'); }
+}
+
+window.deleteParcel = async function(id) {
+  if (!confirm('Delete this entry? Cannot be undone.')) return;
+  try { await deleteDoc(doc(db,'parcels',id)); toast('Deleted.'); }
+  catch(e) { toast('Error deleting','err'); }
+}
+
+window.clearAllDelivered = async function() {
+  const del = allParcels.filter(p=>p.delivered);
+  if (!del.length) { toast('No delivered parcels.','err'); return; }
+  if (!confirm(`Delete all ${del.length} delivered parcels? Cannot be undone.`)) return;
+  try { await Promise.all(del.map(p=>deleteDoc(doc(db,'parcels',p.id)))); toast(`✓ ${del.length} cleared.`); }
+  catch(e) { toast('Error clearing','err'); }
+}
+
+window.switchTab = function(name) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('t-'+name)?.classList.add('active');
   document.getElementById('p-'+name)?.classList.add('active');
-  if(name==='users')loadUsers();
-  if(name==='add')loadUsersForDropdown();
-  if(name==='search')doSearch();
-  if(name==='all')renderAll();
+  if (name==='users') loadUsers();
+  if (name==='add') loadUsersForDropdown();
+  if (name==='search') doSearch();
+  if (name==='all') renderAll();
 }
 
-async function loadUsersForDropdown(){
-  const sel=document.getElementById('a-user');
-  if(!sel)return;
-  const snap=await getDocs(collection(db,'users'));
-  allUsers=snap.docs.map(d=>({id:d.id,...d.data()}));
-  sel.innerHTML='<option value="">— Admin entry —</option>'+allUsers.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
+window.setAddMode = function(mode) {
+  addMode = mode;
+  document.getElementById('mode-tracking').classList.toggle('active', mode==='tracking');
+  document.getElementById('mode-full').classList.toggle('active', mode==='full');
+  document.getElementById('hint-tracking').style.display = mode==='tracking'?'block':'none';
+  document.getElementById('hint-full').style.display = mode==='full'?'block':'none';
+  document.getElementById('a-paste').placeholder = mode==='tracking'
+    ? 'SF3202034025F\nFMPP4049330150\nFMPP4049619164'
+    : 'Rahul Sharma\nFMPP4011928937\n603028\n5598\nPS5';
 }
 
-window.adminSmartParse = async function(){
-  const raw = document.getElementById('a-smart-input').value.trim();
-  const statusEl = document.getElementById('a-smart-status');
-  const btn = document.getElementById('a-smart-btn');
-  if(!raw){ statusEl.style.display='block'; statusEl.style.color='var(--danger)'; statusEl.textContent='Please paste a message first.'; return; }
-  btn.disabled=true; btn.textContent='Parsing…';
-  statusEl.style.display='block'; statusEl.style.color='var(--text3)'; statusEl.textContent='AI is reading your message…';
-  try{
-    const res = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:300,
-        messages:[{role:"user",content:"Extract parcel details from this WhatsApp message and return ONLY a JSON object with these fields: parcelName, tracking, otp, last4, product. If a field is not found return empty string. For last4 extract only the last 4 digits of any phone/mobile number found. Message:
-
-"+raw}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text||'';
-    const clean = text.replace(/```json|```/g,'').trim();
-    const parsed = JSON.parse(clean);
-    if(parsed.parcelName) document.getElementById('a-custname').value=parsed.parcelName;
-    if(parsed.tracking) document.getElementById('a-tracking').value=parsed.tracking;
-    if(parsed.otp) document.getElementById('a-otp').value=parsed.otp;
-    if(parsed.last4){ const d=parsed.last4.replace(/[^0-9]/g,''); document.getElementById('a-last4').value=d.slice(-4); }
-    if(parsed.product) document.getElementById('a-product').value=parsed.product;
-    document.getElementById('a-smart-input').value='';
-    statusEl.style.color='var(--accent)'; statusEl.textContent='✓ Fields filled! Review and click Import.';
-  }catch(e){
-    statusEl.style.color='var(--danger)'; statusEl.textContent='Could not parse. Fill fields manually.';
-  }
-  btn.disabled=false; btn.textContent='Parse';
+async function loadUsersForDropdown() {
+  const snap = await getDocs(collection(db,'users'));
+  allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
+  const sel = document.getElementById('a-user');
+  sel.innerHTML = '<option value="">— Admin entry —</option>' + allUsers.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
 }
 
-let addMode = 'tracking';
-window.setAddMode = function(mode){
-  addMode=mode;
-  document.getElementById('mode-tracking').classList.toggle('active',mode==='tracking');
-  document.getElementById('mode-full').classList.toggle('active',mode==='full');
-  document.getElementById('hint-tracking').style.display=mode==='tracking'?'block':'none';
-  document.getElementById('hint-full').style.display=mode==='full'?'block':'none';
-  const ta=document.getElementById('a-paste');
-  ta.value='';
-  ta.placeholder=mode==='tracking'
-    ?'SF3202034025F\nFMPP4049330150\nFMPP4049619164'
-    :'Rahul Sharma\nFMPP4011928937\n603028\n5598\nPS5';
+async function loadUsers() {
+  const container = document.getElementById('users-list');
+  container.innerHTML = '<div class="loading">Loading…</div>';
+  const snap = await getDocs(collection(db,'users'));
+  const users = snap.docs.map(d=>({id:d.id,...d.data()}));
+  if (!users.length) { container.innerHTML='<div class="empty"><p>No users registered yet</p></div>'; return; }
+  const counts = {};
+  allParcels.forEach(p=>{ if(p.userId) counts[p.userId]=(counts[p.userId]||0)+1; });
+  container.innerHTML = '<div class="users-list">' + users.map(u => {
+    const ini = u.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const joined = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    return `<div class="user-row-card"><div class="ur-avatar">${esc(ini)}</div><div class="ur-info"><div class="ur-name">${esc(u.name)}</div><div class="ur-meta">Joined ${joined}</div></div><div class="ur-count">${counts[u.id]||0} parcels</div></div>`;
+  }).join('') + '</div>';
 }
 
-function isTrackingId(s){return /^[A-Z0-9]{8,}$/i.test(s.trim())}
+function isTrackingId(s) { return /^[A-Z0-9]{8,}$/i.test(s.trim()); }
 
-window.adminPasteParcels = async function(){
-  const raw=document.getElementById('a-paste').value.trim();
-  const userId=document.getElementById('a-user').value;
-  const toastEl=document.getElementById('a-toast');
-  toastEl.className='form-toast';
-  if(!raw){toastEl.className='form-toast err';toastEl.textContent='Paste your WhatsApp messages first.';return}
-  const btn=document.getElementById('a-submit-btn');
-  btn.disabled=true;
-  const selectedUser=allUsers.find(u=>u.id===userId);
-  const userName=userId?(selectedUser?.name||'Unknown'):'Admin ('+currentAdmin.name+')';
-  const {addDoc,serverTimestamp,getDocs:gd,query:q2,where:w2}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-  let added=0,skipped=0,updated=0;
-  try{
-    if(addMode==='tracking'){
-      const lines=raw.split(/\n/).map(l=>l.trim()).filter(Boolean);
-      for(const line of lines){
-        const tokens=line.split(/\s+/).filter(t=>isTrackingId(t));
-        for(const tracking of tokens){
-          const exists=allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
-          if(exists){skipped++;continue}
-          await addDoc(collection(db,'parcels'),{customerName:'—',tracking,otp:'—',last4:'—',product:'—',userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
+window.adminPasteParcels = async function() {
+  const raw = document.getElementById('a-paste').value.trim();
+  const userId = document.getElementById('a-user').value;
+  const toastEl = document.getElementById('a-toast');
+  toastEl.className = 'form-toast';
+  if (!raw) { toastEl.className='form-toast err'; toastEl.textContent='Paste your messages first.'; return; }
+  const btn = document.getElementById('a-submit-btn');
+  btn.disabled = true;
+  const selectedUser = allUsers.find(u=>u.id===userId);
+  const userName = userId ? (selectedUser?.name||'Unknown') : 'Admin ('+(_currentAdmin?.name||'')+ ')';
+  let added=0, skipped=0, updated=0;
+  try {
+    if (addMode==='tracking') {
+      const lines = raw.split('\n').map(l=>l.trim()).filter(Boolean);
+      for (const line of lines) {
+        const tokens = line.split(/\s+/).filter(t=>isTrackingId(t));
+        for (const tracking of tokens) {
+          if (allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase())) { skipped++; continue; }
+          await addDoc(collection(db,'parcels'),{parcelName:'—',tracking,otp:'—',last4:'—',product:'—',userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
           added++;
         }
       }
     } else {
-      const blocks=raw.split(/\n{2,}/);
-      for(const block of blocks){
-        const lines=block.trim().split('\n').map(l=>l.trim()).filter(Boolean);
-        if(lines.length<4){skipped++;continue}
-        const [customerName,tracking,otp,last4,...rest]=lines;
-        const product=rest.join(' ')||'—';
-        if(!tracking||!otp){skipped++;continue}
-        const existing=allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
-        if(existing){
-          // update existing with OTP details
-          await updateDoc(doc(db,'parcels',existing.id),{customerName,otp,last4:last4||'—',product:product||'—'});
-          updated++;continue;
-        }
-        await addDoc(collection(db,'parcels'),{customerName,tracking,otp,last4:last4||'—',product:product||'—',userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
+      const blocks = raw.split(/\n{2,}/);
+      for (const block of blocks) {
+        const lines = block.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+        if (lines.length < 4) { skipped++; continue; }
+        const [parcelName, tracking, otp, last4, ...rest] = lines;
+        const product = rest.join(' ')||'—';
+        if (!tracking||!otp) { skipped++; continue; }
+        const existing = allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
+        if (existing) { await updateDoc(doc(db,'parcels',existing.id),{parcelName,otp,last4:last4||'—',product}); updated++; continue; }
+        await addDoc(collection(db,'parcels'),{parcelName,tracking,otp,last4:last4||'—',product,userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
         added++;
       }
     }
     document.getElementById('a-paste').value='';
     const parts=[];
     if(added)parts.push(added+' added');
-    if(updated)parts.push(updated+' updated with OTP');
-    if(skipped)parts.push(skipped+' skipped (duplicate)');
+    if(updated)parts.push(updated+' updated');
+    if(skipped)parts.push(skipped+' skipped');
     toastEl.className='form-toast '+(added||updated?'ok':'err');
-    toastEl.textContent=added||updated?'✓ '+parts.join(', ')+'!':'Nothing imported. '+parts.join(', ')+'.';
-  }catch(e){toastEl.className='form-toast err';toastEl.textContent='Error importing. Try again.'}
-  btn.disabled=false;
+    toastEl.textContent=(added||updated?'✓ ':'') + parts.join(', ');
+  } catch(e) { toastEl.className='form-toast err'; toastEl.textContent='Error. Try again.'; }
+  btn.disabled = false;
 }
 
-async function loadUsers(){
-  const container=document.getElementById('users-list');
-  container.innerHTML='<div class="loading">Loading users…</div>';
-  const snap=await getDocs(collection(db,'users'));
-  const users=snap.docs.map(d=>({id:d.id,...d.data()}));
-  if(!users.length){container.innerHTML='<div class="empty"><p>No users registered yet</p></div>';return}
-  const counts={};
-  allParcels.forEach(p=>{if(p.userId)counts[p.userId]=(counts[p.userId]||0)+1});
-  container.innerHTML='<div class="users-list">'+users.map(u=>{
-    const initials=u.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    const joined=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
-    return `<div class="user-row-card">
-      <div class="ur-avatar">${esc(initials)}</div>
-      <div class="ur-info">
-        <div class="ur-name">${esc(u.name)}</div>
-        <div class="ur-meta">Joined ${joined}</div>
-      </div>
-      <div class="ur-count">${counts[u.id]||0} parcels</div>
-    </div>`;
-  }).join('')+'</div>';
+window.adminSmartParse = async function() {
+  const raw = document.getElementById('a-smart-input').value.trim();
+  const statusEl = document.getElementById('a-smart-status');
+  const btn = document.getElementById('a-smart-btn');
+  if (!raw) { statusEl.style.display='block'; statusEl.style.color='var(--danger)'; statusEl.textContent='Paste a message first.'; return; }
+  btn.disabled=true; btn.textContent='Parsing…';
+  statusEl.style.display='block'; statusEl.style.color='var(--text3)'; statusEl.textContent='AI reading…';
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:"Extract parcel info from this WhatsApp message. Return ONLY JSON with keys: parcelName, tracking, otp, last4 (last 4 digits of phone if found), product. Empty string if not found.\n\n"+raw}]})});
+    const data = await res.json();
+    const parsed = JSON.parse(data.content?.[0]?.text.replace(/```json|```/g,'').trim()||'{}');
+    if(parsed.parcelName) document.getElementById('a-custname') && (document.getElementById('a-custname').value=parsed.parcelName);
+    if(parsed.tracking) document.getElementById('a-tracking') && (document.getElementById('a-tracking').value=parsed.tracking);
+    if(parsed.otp) document.getElementById('a-otp') && (document.getElementById('a-otp').value=parsed.otp);
+    if(parsed.last4){ const d=parsed.last4.replace(/[^0-9]/g,''); document.getElementById('a-last4') && (document.getElementById('a-last4').value=d.slice(-4)); }
+    if(parsed.product) document.getElementById('a-product') && (document.getElementById('a-product').value=parsed.product);
+    document.getElementById('a-smart-input').value='';
+    statusEl.style.color='var(--accent)'; statusEl.textContent='✓ Done! Review and import.';
+  } catch(e) { statusEl.style.color='var(--danger)'; statusEl.textContent='Could not parse. Fill manually.'; }
+  btn.disabled=false; btn.textContent='⚡ Parse';
 }
-
-// ── AUTO SESSION ──
-try{
-  const sess=JSON.parse(sessionStorage.getItem('admin_sess')||'null');
-  if(sess?.key&&ADMINS[sess.key]){
-    selectedAdminKey=sess.key;
-    currentAdmin={key:sess.key,...ADMINS[sess.key]};
-    window._launchApp();
-  }
-}catch(e){}
 </script>
 </body>
 </html>
