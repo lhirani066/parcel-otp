@@ -516,7 +516,7 @@ window.setFilter = function(f,btn){
   renderAll();
 }
 
-function renderAll(){
+window.renderAll = function(){
   const container=document.getElementById('all-list');
   if(!container)return;
   const sq=(document.getElementById('allSearchInput')?.value||'').toLowerCase().trim();
