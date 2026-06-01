@@ -404,7 +404,7 @@ function cardHTML(p){
   return `<div class="p-card${p.delivered?' delivered':''}" id="pc-${p.id}">
     <div class="p-top">
       <div class="p-left">
-        <div class="p-name">${esc(p.customerName)}</div>
+        <div class="p-name">${esc(p.parcelName||p.customerName||'—')}</div>
         ${p.product&&p.product!=='—'?`<div class="p-product">${esc(p.product)}</div>`:''}
         <div class="p-submitter"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${esc(p.userName||'Unknown')}</div>
       </div>
@@ -422,7 +422,7 @@ function cardHTML(p){
     </div>
     <div class="p-meta">
       <div class="meta mono"><strong>Tracking:</strong> ${esc(p.tracking)}</div>
-      ${p.last4&&p.last4!=='—'?`<div class="meta">Last 4: <strong>${esc(p.last4)}</strong></div>`:''}
+      ${p.last4&&p.last4!=='—'?`<div class="meta">Last 4: <strong>${esc(String(p.last4).replace(/[^0-9]/g,'').slice(-4))}</strong></div>`:''}
       <div class="meta">${date}</div>
       <div style="margin-left:auto">
         ${p.delivered
@@ -467,7 +467,7 @@ window.doSearch = function(){
   if(!q){container.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search by tracking ID, name, or last 4 digits</p></div>`;return}
   const hits=allParcels.filter(p=>
     (p.tracking||'').toLowerCase().includes(q)||
-    (p.customerName||'').toLowerCase().includes(q)||
+    (p.parcelName||p.customerName||'').toLowerCase().includes(q)||
     (p.last4||'').includes(q)||
     (p.otp||'').includes(q)||
     (p.product||'').toLowerCase().includes(q)||
