@@ -116,6 +116,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn-save-otp{padding:7px 14px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
 .btn-cancel-otp{padding:7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer}
 
+.mode-btn{padding:8px 16px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;transition:.15s}
+.mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.hint-box{background:#fdf6e3;border:1px solid rgba(184,134,11,.2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:12px;line-height:1.7}
+.hint-box strong{font-weight:600}
+.hint-box code{font-family:'DM Mono',monospace;background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:12px}
 /* ADD FORM */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -247,21 +252,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
   <!-- ADD PARCEL -->
   <div class="panel" id="p-add">
-    <div class="form-card">
-      <div class="form-grid">
-        <div class="field-sm full"><label>Customer Name</label><input type="text" id="a-custname" placeholder="Rahul Sharma" autocomplete="off"/></div>
-        <div class="field-sm full"><label>Tracking ID</label><input type="text" id="a-tracking" placeholder="FMPP4011928937" autocomplete="off"/></div>
-        <div class="field-sm"><label>OTP</label><input type="text" id="a-otp" placeholder="603028" inputmode="numeric"/></div>
-        <div class="field-sm"><label>Last 4 Digits</label><input type="text" id="a-last4" placeholder="5598" inputmode="numeric" maxlength="4"/></div>
-        <div class="field-sm full"><label>Product Name</label><input type="text" id="a-product" placeholder="PS5, Nike Shoes…" autocomplete="off"/></div>
-        <div class="field-sm full"><label>Assign to user (optional)</label><select id="a-user"><option value="">— Admin entry —</option></select></div>
-      </div>
-      <button class="btn-submit" onclick="adminAddParcel()" id="a-submit-btn">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Parcel
-      </button>
-      <div class="form-toast" id="a-toast"></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="mode-btn active" id="mode-tracking" onclick="setAddMode('tracking')">Tracking IDs only</button>
+      <button class="mode-btn" id="mode-full" onclick="setAddMode('full')">Full details (with OTP)</button>
     </div>
+
+    <div class="hint-box" id="hint-tracking">
+      <strong>Paste tracking IDs from WhatsApp</strong> — one per line or all together. Works with FMPP, SF, AMZN and all formats. Duplicates are skipped automatically.
+    </div>
+    <div class="hint-box" id="hint-full" style="display:none">
+      <strong>Paste full OTP messages</strong> — each parcel needs 5 lines:<br>
+      <code>Customer Name</code> → <code>Tracking ID</code> → <code>OTP</code> → <code>Last 4 digits</code> → <code>Product name</code><br>
+      Separate multiple parcels with a blank line. If tracking already exists, OTP details will be updated automatically.
+    </div>
+
+    <div style="margin-bottom:10px">
+      <label style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">Assign to user (optional)</label>
+      <select id="a-user" style="width:100%;padding:9px 12px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none">
+        <option value="">— Admin entry —</option>
+      </select>
+    </div>
+
+    <textarea id="a-paste" style="width:100%;min-height:180px;padding:14px;font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);resize:vertical;outline:none;transition:.15s" placeholder="SF3202034025F&#10;FMPP4049330150&#10;FMPP4049619164" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+
+    <button class="btn-submit" onclick="adminPasteParcels()" id="a-submit-btn" style="margin-top:10px">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import Parcels
+    </button>
+    <div class="form-toast" id="a-toast"></div>
   </div>
 
   <!-- USERS -->
@@ -505,34 +523,73 @@ async function loadUsersForDropdown(){
   sel.innerHTML='<option value="">— Admin entry —</option>'+allUsers.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
 }
 
-window.adminAddParcel = async function(){
-  const customerName=document.getElementById('a-custname').value.trim();
-  const tracking=document.getElementById('a-tracking').value.trim();
-  const otp=document.getElementById('a-otp').value.trim();
-  const last4=document.getElementById('a-last4').value.trim();
-  const product=document.getElementById('a-product').value.trim();
+let addMode = 'tracking';
+window.setAddMode = function(mode){
+  addMode=mode;
+  document.getElementById('mode-tracking').classList.toggle('active',mode==='tracking');
+  document.getElementById('mode-full').classList.toggle('active',mode==='full');
+  document.getElementById('hint-tracking').style.display=mode==='tracking'?'block':'none';
+  document.getElementById('hint-full').style.display=mode==='full'?'block':'none';
+  const ta=document.getElementById('a-paste');
+  ta.value='';
+  ta.placeholder=mode==='tracking'
+    ?'SF3202034025F\nFMPP4049330150\nFMPP4049619164'
+    :'Rahul Sharma\nFMPP4011928937\n603028\n5598\nPS5';
+}
+
+function isTrackingId(s){return /^[A-Z0-9]{8,}$/i.test(s.trim())}
+
+window.adminPasteParcels = async function(){
+  const raw=document.getElementById('a-paste').value.trim();
   const userId=document.getElementById('a-user').value;
   const toastEl=document.getElementById('a-toast');
   toastEl.className='form-toast';
-  if(!customerName||!tracking){toastEl.className='form-toast err';toastEl.textContent='Customer name and tracking ID are required.';return}
+  if(!raw){toastEl.className='form-toast err';toastEl.textContent='Paste your WhatsApp messages first.';return}
   const btn=document.getElementById('a-submit-btn');
-  btn.disabled=true;btn.childNodes[btn.childNodes.length-1].textContent=' Adding…';
+  btn.disabled=true;
   const selectedUser=allUsers.find(u=>u.id===userId);
+  const userName=userId?(selectedUser?.name||'Unknown'):'Admin ('+currentAdmin.name+')';
+  const {addDoc,serverTimestamp,getDocs:gd,query:q2,where:w2}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  let added=0,skipped=0,updated=0;
   try{
-    const {addDoc,serverTimestamp}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    await addDoc(collection(db,'parcels'),{
-      customerName,tracking,otp:otp||'—',last4:last4||'—',product:product||'—',
-      userId:userId||'admin',
-      userName:userId?selectedUser?.name||'Unknown':'Admin ('+currentAdmin.name+')',
-      delivered:false,
-      createdAt:serverTimestamp()
-    });
-    ['a-custname','a-tracking','a-otp','a-last4','a-product'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('a-user').value='';
-    toastEl.className='form-toast ok';
-    toastEl.textContent='✓ Parcel added successfully!';
-  }catch(e){toastEl.className='form-toast err';toastEl.textContent='Error adding parcel. Try again.'}
-  btn.disabled=false;btn.childNodes[btn.childNodes.length-1].textContent=' Add Parcel';
+    if(addMode==='tracking'){
+      const lines=raw.split(/\n/).map(l=>l.trim()).filter(Boolean);
+      for(const line of lines){
+        const tokens=line.split(/\s+/).filter(t=>isTrackingId(t));
+        for(const tracking of tokens){
+          const exists=allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
+          if(exists){skipped++;continue}
+          await addDoc(collection(db,'parcels'),{customerName:'—',tracking,otp:'—',last4:'—',product:'—',userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
+          added++;
+        }
+      }
+    } else {
+      const blocks=raw.split(/\n{2,}/);
+      for(const block of blocks){
+        const lines=block.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+        if(lines.length<4){skipped++;continue}
+        const [customerName,tracking,otp,last4,...rest]=lines;
+        const product=rest.join(' ')||'—';
+        if(!tracking||!otp){skipped++;continue}
+        const existing=allParcels.find(p=>p.tracking.toLowerCase()===tracking.toLowerCase());
+        if(existing){
+          // update existing with OTP details
+          await updateDoc(doc(db,'parcels',existing.id),{customerName,otp,last4:last4||'—',product:product||'—'});
+          updated++;continue;
+        }
+        await addDoc(collection(db,'parcels'),{customerName,tracking,otp,last4:last4||'—',product:product||'—',userId:userId||'admin',userName,delivered:false,createdAt:serverTimestamp()});
+        added++;
+      }
+    }
+    document.getElementById('a-paste').value='';
+    const parts=[];
+    if(added)parts.push(added+' added');
+    if(updated)parts.push(updated+' updated with OTP');
+    if(skipped)parts.push(skipped+' skipped (duplicate)');
+    toastEl.className='form-toast '+(added||updated?'ok':'err');
+    toastEl.textContent=added||updated?'✓ '+parts.join(', ')+'!':'Nothing imported. '+parts.join(', ')+'.';
+  }catch(e){toastEl.className='form-toast err';toastEl.textContent='Error importing. Try again.'}
+  btn.disabled=false;
 }
 
 async function loadUsers(){
