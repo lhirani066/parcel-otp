@@ -102,6 +102,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .meta{font-size:12px;color:var(--text3)}
 .meta strong{color:var(--text2);font-weight:500}
 .meta.mono{font-family:'DM Mono',monospace;font-size:11px}
+.btn-delete{font-size:12px;padding:5px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;transition:.15s}
+.btn-delete:hover{background:var(--danger-bg);color:var(--danger);border-color:rgba(192,57,43,.2)}
 .btn-deliver{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s;font-family:'DM Sans',sans-serif}
 .btn-deliver svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .btn-deliver:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-light)}
@@ -246,6 +248,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
       <button class="filter-btn" onclick="setFilter('nootp',this)">No OTP</button>
       <button class="filter-btn" onclick="setFilter('delivered',this)">Delivered</button>
+      <button class="filter-btn" onclick="clearAllDelivered()" style="margin-left:auto;color:var(--danger);border-color:rgba(192,57,43,.3)" onmouseover="this.style.background='var(--danger-bg)'" onmouseout="this.style.background=''">
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;display:inline;vertical-align:-2px;margin-right:3px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Clear delivered
+      </button>
     </div>
     <div id="all-list"><div class="loading">Loading parcels…</div></div>
   </div>
@@ -290,7 +296,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAWKEUcFGgEn20Uqc3pkHxzDuewO_FOW8w",
@@ -424,10 +430,13 @@ function cardHTML(p){
       <div class="meta mono"><strong>Tracking:</strong> ${esc(p.tracking)}</div>
       ${p.last4&&p.last4!=='—'?`<div class="meta">Last 4: <strong>${esc(String(p.last4).replace(/[^0-9]/g,'').slice(-4))}</strong></div>`:''}
       <div class="meta">${date}</div>
-      <div style="margin-left:auto">
+      <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
         ${p.delivered
           ? `<span class="delivered-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Delivered</span>`
           : `<button class="btn-deliver" onclick="markDelivered('${p.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Mark delivered</button>`}
+        <button class="btn-delete" onclick="deleteParcel('${p.id}')" title="Delete entry">
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
       </div>
     </div>
   </div>`;
@@ -457,6 +466,24 @@ window.markDelivered = async function(id){
     await updateDoc(doc(db,'parcels',id),{delivered:true});
     toast('Marked as delivered!');
   }catch(e){toast('Error updating','err')}
+}
+
+window.deleteParcel = async function(id){
+  if(!confirm('Delete this parcel entry? This cannot be undone.')) return;
+  try{
+    await deleteDoc(doc(db,'parcels',id));
+    toast('Entry deleted.');
+  }catch(e){toast('Error deleting','err')}
+}
+
+window.clearAllDelivered = async function(){
+  const delivered = allParcels.filter(p=>p.delivered);
+  if(!delivered.length){toast('No delivered parcels to clear.','err');return}
+  if(!confirm(`Delete all ${delivered.length} delivered parcel(s)? This cannot be undone.`)) return;
+  try{
+    await Promise.all(delivered.map(p=>deleteDoc(doc(db,'parcels',p.id))));
+    toast(`✓ ${delivered.length} delivered parcels cleared.`);
+  }catch(e){toast('Error clearing','err')}
 }
 
 // ── SEARCH ──
