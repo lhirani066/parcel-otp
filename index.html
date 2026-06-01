@@ -55,6 +55,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .empty svg{width:36px;height:36px;margin:0 auto 10px;display:block;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round}
 .empty p{font-size:13px}
 .loading{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
+.field-sm input.otp-part{width:100%;padding:10px 12px;font-size:18px;letter-spacing:4px;text-align:center}
 @media(max-width:480px){.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:1}.main{padding:1rem}.topbar{padding:0 1rem}}
 </style>
 </head>
@@ -83,17 +84,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <label>Tracking ID</label>
         <input type="text" id="f-tracking" class="mono" placeholder="FMPP4011928937" autocomplete="off" spellcheck="false"/>
       </div>
-      <div class="field-sm">
+      <div class="field-sm full">
         <label>OTP</label>
-        <input type="text" id="f-otp" class="mono" placeholder="603028" inputmode="numeric"/>
+        <input type="text" id="f-otp" class="mono" placeholder="603028" inputmode="numeric" maxlength="6"/>
       </div>
-      <div class="field-sm">
-        <label>Last 4 Digits</label>
-        <input type="text" id="f-last4" class="mono" placeholder="5598" inputmode="numeric" maxlength="4"/>
+      <div class="field-sm full">
+        <label>Last 4 Digits <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(paste full number, last 4 auto-extracted)</span></label>
+        <input type="text" id="f-last4" placeholder="Paste full number or last 4 digits" inputmode="numeric" oninput="extractLast4(this)" onpaste="setTimeout(()=>extractLast4(this),0)"/>
       </div>
       <div class="field-sm full">
         <label>Product Name</label>
-        <input type="text" id="f-product" placeholder="PS5, Nike Shoes…" autocomplete="off"/>
+        <input type="text" id="f-product" placeholder="e.g. PS5, Nike Shoes" autocomplete="off"/>
       </div>
     </div>
     <button class="btn-submit" onclick="submitParcel()" id="submit-btn">Submit Parcel</button>
