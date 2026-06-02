@@ -129,6 +129,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .toast-bar.ok{background:var(--accent);color:#fff}
 .toast-bar.err{background:var(--danger);color:#fff}
 @media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}.chips{display:none}.topbar{padding:0 1rem}.panel{padding:1rem}}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:fadeIn .15s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{background:var(--surface);border-radius:16px;padding:1.75rem;max-width:340px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);animation:slideUp .2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.modal-icon{width:48px;height:48px;background:var(--danger-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.modal-icon svg{width:22px;height:22px;stroke:var(--danger);fill:none;stroke-width:2;stroke-linecap:round}
+.modal-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:8px}
+.modal-body{font-size:13px;color:var(--text2);text-align:center;line-height:1.6;margin-bottom:1.25rem}
+.modal-count{font-weight:700;color:var(--danger)}
+.modal-actions{display:flex;gap:8px}
+.modal-cancel{flex:1;padding:11px;font-size:14px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface2);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;transition:.15s}
+.modal-cancel:hover{background:var(--surface)}
+.modal-confirm{flex:1;padding:11px;font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;background:var(--danger);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:opacity .15s}
+.modal-confirm:hover{opacity:.9}
 </style>
 </head>
 <body>
@@ -146,11 +160,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
           <div class="u-info"><div class="u-name">Lakshya</div><div class="u-role">Super Admin</div></div>
           <div class="u-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         </div>
-        <div class="u-card" id="uc-deepanshu" onclick="selectUser('deepanshu')">
-          <div class="u-avatar" style="background:#e6edf8;color:#1a4a8a">DH</div>
-          <div class="u-info"><div class="u-name">Deepanshu</div><div class="u-role">Admin</div></div>
-          <div class="u-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        </div>
+
       </div>
       <div class="pw-section" id="pw-section">
         <div class="pw-label">Password</div>
@@ -187,17 +197,28 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="s-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <input class="search-input" id="searchInput" type="text" placeholder="Type tracking ID, name, OTP or last 4 digits…" oninput="doSearch()" autocomplete="off" spellcheck="false"/>
     </div>
-    <div class="stat-row">
-      <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total</div></div>
+
+    <!-- DATE FILTER + STATS -->
+    <div class="filter-row" style="margin-bottom:10px">
+      <button class="filter-btn active" id="dash-today" onclick="setDashDate('today',this)">Today</button>
+      <button class="filter-btn" id="dash-yesterday" onclick="setDashDate('yesterday',this)">Yesterday</button>
+      <button class="filter-btn" id="dash-all" onclick="setDashDate('all',this)">All Time</button>
+    </div>
+    <div class="stat-row" style="margin-bottom:1.25rem">
+      <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl" id="st-total-lbl">Today Total</div></div>
       <div class="stat-card green"><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
       <div class="stat-card gray"><div class="stat-num" id="st-delivered">0</div><div class="stat-lbl">Delivered</div></div>
       <div class="stat-card warn"><div class="stat-num" id="st-nootp">0</div><div class="stat-lbl">No OTP</div></div>
     </div>
-    <div id="search-results"><div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search any parcel above</p></div></div>
+
+    <div id="search-results"></div>
+    <div id="today-parcels"></div>
   </div>
   <div class="panel" id="p-all">
     <div class="filter-row">
       <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('today',this)">Today</button>
+      <button class="filter-btn" onclick="setFilter('yesterday',this)">Yesterday</button>
       <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
       <button class="filter-btn" onclick="setFilter('nootp',this)">No OTP</button>
       <button class="filter-btn" onclick="setFilter('delivered',this)">Delivered</button>
@@ -210,14 +231,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div id="all-list"><div class="loading">Loading…</div></div>
   </div>
   <div class="panel" id="p-add">
-    <div style="background:var(--surface2);border:1.5px dashed var(--accent-light);border-radius:var(--radius);padding:1rem;margin-bottom:12px">
-      <div style="font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">⚡ Smart Paste — AI fills the form</div>
-      <div style="display:flex;gap:8px">
-        <textarea id="a-smart-input" rows="3" style="flex:1;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);resize:none;outline:none;line-height:1.6" placeholder="Paste WhatsApp OTP message here…"></textarea>
-        <button onclick="adminSmartParse()" id="a-smart-btn" style="padding:0 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">⚡ Parse</button>
-      </div>
-      <div id="a-smart-status" style="font-size:12px;margin-top:6px;display:none"></div>
-    </div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <button class="mode-btn active" id="mode-tracking" onclick="setAddMode('tracking')">Tracking IDs only</button>
       <button class="mode-btn" id="mode-full" onclick="setAddMode('full')">Full details (with OTP)</button>
@@ -234,6 +247,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
   <div class="panel" id="p-users">
     <div id="users-list"><div class="loading">Loading…</div></div>
+  </div>
+</div>
+
+<!-- WARNING MODAL -->
+<div id="warn-modal" style="display:none">
+  <div class="modal-overlay" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+      <div class="modal-title">Delete delivered parcels?</div>
+      <div class="modal-body">You are about to permanently delete <span class="modal-count" id="modal-count">0</span> delivered parcels. This cannot be undone.</div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmClearDelivered()">Yes, delete all</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -256,8 +284,7 @@ const db = firebase.firestore();
 
 // ── ADMINS ──
 const ADMINS = {
-  lakshya:   {name:'Lakshya',   password:'lakshya123',   color:'#1a6b3c', bg:'#e6f4ec', initials:'LH'},
-  deepanshu: {name:'Deepanshu', password:'deepanshu123', color:'#1a4a8a', bg:'#e6edf8', initials:'DH'}
+  lakshya: {name:'Lakshya', password:'lakshya123', color:'#1a6b3c', bg:'#e6f4ec', initials:'LH'}
 };
 
 let selectedKey = null;
@@ -343,10 +370,26 @@ function updateStats() {
   var delivered = allParcels.filter(function(p){ return p.delivered; }).length;
   var pending = total - delivered;
   var nootp = allParcels.filter(function(p){ return !p.delivered && (!p.otp || p.otp === '—'); }).length;
-  document.getElementById('st-total').textContent = total;
-  document.getElementById('st-pending').textContent = pending;
-  document.getElementById('st-delivered').textContent = delivered;
-  document.getElementById('st-nootp').textContent = nootp;
+
+  // Dashboard stats based on selected date filter
+  var dashList = typeof getDashList === 'function' ? getDashList() : allParcels;
+  var dashTotal = dashList.length;
+  var dashDelivered = dashList.filter(function(p){ return p.delivered; }).length;
+  var dashPending = dashTotal - dashDelivered;
+  var dashNootp = dashList.filter(function(p){ return !p.delivered && (!p.otp || p.otp === '—'); }).length;
+
+  document.getElementById('st-total').textContent = dashTotal;
+  document.getElementById('st-pending').textContent = dashPending;
+  document.getElementById('st-delivered').textContent = dashDelivered;
+  document.getElementById('st-nootp').textContent = dashNootp;
+
+  // Update stat label
+  var lbl = document.getElementById('st-total-lbl');
+  if (lbl) {
+    var df = typeof dashDateFilter !== 'undefined' ? dashDateFilter : 'today';
+    lbl.textContent = df === 'today' ? 'Today Total' : df === 'yesterday' ? 'Yesterday Total' : 'All Time';
+  }
+
   document.getElementById('c-total').textContent = total + ' total';
   document.getElementById('c-pending').textContent = pending + ' pending';
   document.getElementById('c-nootp').textContent = nootp + ' no OTP';
@@ -392,11 +435,57 @@ function cardHTML(p) {
 }
 
 // ── SEARCH ──
+var dashDateFilter = 'today';
+
+function setDashDate(period, btn) {
+  dashDateFilter = period;
+  document.querySelectorAll('#dash-today,#dash-yesterday,#dash-all').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  updateStats();
+  renderTodayParcels();
+}
+
+function getDashList() {
+  var now = new Date();
+  var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  var yesterdayStart = todayStart - 86400000;
+  return allParcels.filter(function(p){
+    var t = p.createdAt ? p.createdAt.toMillis() : 0;
+    if (dashDateFilter === 'today') return t >= todayStart;
+    if (dashDateFilter === 'yesterday') return t >= yesterdayStart && t < todayStart;
+    return true;
+  });
+}
+
+function renderTodayParcels() {
+  var container = document.getElementById('today-parcels');
+  if (!container) return;
+  var list = getDashList().sort(function(a,b){
+    return (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0);
+  });
+  var label = dashDateFilter === 'today' ? 'today' : dashDateFilter === 'yesterday' ? 'yesterday' : 'any time';
+  if (!list.length) {
+    container.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels submitted ' + label + '</p></div>';
+    return;
+  }
+  container.innerHTML = '<div class="parcel-list">' + list.map(cardHTML).join('') + '</div>';
+}
+
 function doSearch() {
   var q = (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '').trim().toLowerCase();
   var container = document.getElementById('search-results');
+  var todayContainer = document.getElementById('today-parcels');
+  var todayLabel = document.getElementById('today-label');
   if (!container) return;
-  if (!q) { container.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Search by tracking ID, name, OTP or last 4</p></div>'; return; }
+  if (!q) {
+    container.innerHTML = '';
+    if (todayContainer) todayContainer.style.display = 'block';
+    if (todayLabel) todayLabel.style.display = 'block';
+    renderTodayParcels();
+    return;
+  }
+  if (todayContainer) todayContainer.style.display = 'none';
+  if (todayLabel) todayLabel.style.display = 'none';
   var hits = allParcels.filter(function(p){
     return (p.tracking||'').toLowerCase().includes(q) ||
            (p.parcelName||p.customerName||'').toLowerCase().includes(q) ||
@@ -409,12 +498,27 @@ function doSearch() {
     : '<div class="empty"><p>No results for "' + esc(q) + '"</p></div>';
 }
 
+function dateLabel(millis) {
+  if (!millis) return 'Unknown date';
+  var now = new Date();
+  var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  var yesterdayStart = todayStart - 86400000;
+  if (millis >= todayStart) return 'Today';
+  if (millis >= yesterdayStart) return 'Yesterday';
+  return new Date(millis).toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'short'});
+}
+
 function renderAll() {
   var container = document.getElementById('all-list');
   if (!container) return;
   var sq = (document.getElementById('allSearchInput') ? document.getElementById('allSearchInput').value : '').toLowerCase().trim();
   var list = allParcels.slice();
-  if (currentFilter === 'pending') list = list.filter(function(p){ return !p.delivered; });
+  var now = new Date();
+  var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  var yesterdayStart = todayStart - 86400000;
+  if (currentFilter === 'today') list = list.filter(function(p){ var t = p.createdAt ? p.createdAt.toMillis() : 0; return t >= todayStart; });
+  else if (currentFilter === 'yesterday') list = list.filter(function(p){ var t = p.createdAt ? p.createdAt.toMillis() : 0; return t >= yesterdayStart && t < todayStart; });
+  else if (currentFilter === 'pending') list = list.filter(function(p){ return !p.delivered; });
   else if (currentFilter === 'nootp') list = list.filter(function(p){ return !p.delivered && (!p.otp || p.otp === '—'); });
   else if (currentFilter === 'delivered') list = list.filter(function(p){ return p.delivered; });
   if (sq) list = list.filter(function(p){
@@ -430,9 +534,24 @@ function renderAll() {
     var bt = b.createdAt ? b.createdAt.toMillis() : 0;
     return bt - at;
   });
-  container.innerHTML = list.length
-    ? '<div class="parcel-list">' + list.map(cardHTML).join('') + '</div>'
-    : '<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels here</p></div>';
+  if (!list.length) {
+    container.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels here</p></div>';
+    return;
+  }
+  // Group by date
+  var html = '<div class="parcel-list">';
+  var lastLabel = null;
+  list.forEach(function(p) {
+    var millis = p.createdAt ? p.createdAt.toMillis() : 0;
+    var label = dateLabel(millis);
+    if (label !== lastLabel) {
+      html += '<div style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding:8px 2px 4px;margin-top:' + (lastLabel ? '8px' : '0') + '">' + label + '</div>';
+      lastLabel = label;
+    }
+    html += cardHTML(p);
+  });
+  html += '</div>';
+  container.innerHTML = html;
 }
 
 function setFilter(f, btn) {
@@ -486,11 +605,23 @@ function deleteParcel(id) {
 
 function clearAllDelivered() {
   var del = allParcels.filter(function(p){ return p.delivered; });
-  if (!del.length) { toast('No delivered parcels.', 'err'); return; }
-  if (!confirm('Delete all ' + del.length + ' delivered parcels? Cannot be undone.')) return;
+  if (!del.length) { toast('No delivered parcels to clear.', 'err'); return; }
+  document.getElementById('modal-count').textContent = del.length;
+  document.getElementById('warn-modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('warn-modal').style.display = 'none';
+}
+
+function confirmClearDelivered() {
+  closeModal();
+  var del = allParcels.filter(function(p){ return p.delivered; });
   var batch = db.batch();
   del.forEach(function(p){ batch.delete(db.collection('parcels').doc(p.id)); });
-  batch.commit().then(function(){ toast('✓ ' + del.length + ' cleared.'); }).catch(function(){ toast('Error', 'err'); });
+  batch.commit()
+    .then(function(){ toast('✓ ' + del.length + ' delivered parcels deleted.'); })
+    .catch(function(){ toast('Error clearing', 'err'); });
 }
 
 // ── ADD PARCEL ──
@@ -563,6 +694,27 @@ function adminPasteParcels() {
   btn.disabled = false;
 }
 
+// ── COPY PARCEL ──
+function copyParcel(id) {
+  var p = allParcels.find(function(p){ return p.id === id; });
+  if (!p) return;
+  var name = p.parcelName || p.customerName || '—';
+  var l4val = String(p.last4||'').replace(/[^0-9]/g,'').slice(-4);
+  var text = [
+    'Name: ' + name,
+    'Tracking: ' + (p.tracking||'—'),
+    'OTP: ' + (p.otp||'—'),
+    'Last 4: ' + (l4val||'—'),
+    'Product: ' + (p.product||'—'),
+    'Submitted by: ' + (p.userName||'—')
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(function(){
+    toast('Copied to clipboard!');
+  }).catch(function(){
+    toast('Could not copy', 'err');
+  });
+}
+
 // ── USERS TAB ──
 function loadUsers() {
   var container = document.getElementById('users-list');
@@ -578,25 +730,6 @@ function loadUsers() {
       return '<div class="user-row-card"><div class="ur-avatar">' + esc(ini) + '</div><div class="ur-info"><div class="ur-name">' + esc(u.name) + '</div><div class="ur-meta">Joined ' + joined + '</div></div><div class="ur-count">' + (counts[u.id]||0) + ' parcels</div></div>';
     }).join('') + '</div>';
   });
-}
-
-// ── SMART PARSE ──
-async function adminSmartParse() {
-  var raw = document.getElementById('a-smart-input').value.trim();
-  var statusEl = document.getElementById('a-smart-status');
-  var btn = document.getElementById('a-smart-btn');
-  if (!raw) { statusEl.style.display='block'; statusEl.style.color='var(--danger)'; statusEl.textContent='Paste a message first.'; return; }
-  btn.disabled = true; btn.textContent = 'Parsing…';
-  statusEl.style.display = 'block'; statusEl.style.color = 'var(--text3)'; statusEl.textContent = 'AI reading…';
-  try {
-    var res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:"Extract parcel info from this WhatsApp message. Return ONLY JSON with keys: parcelName, tracking, otp, last4 (last 4 digits of phone if found), product. Empty string if not found.\n\n"+raw}]})});
-    var data = await res.json();
-    var parsed = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    if (parsed.tracking) document.getElementById('a-paste').value = parsed.tracking;
-    statusEl.style.color = 'var(--accent)'; statusEl.textContent = '✓ Done! Review and import.';
-    document.getElementById('a-smart-input').value = '';
-  } catch(e) { statusEl.style.color = 'var(--danger)'; statusEl.textContent = 'Could not parse. Fill manually.'; }
-  btn.disabled = false; btn.textContent = '⚡ Parse';
 }
 
 // ── AUTO SESSION ──
