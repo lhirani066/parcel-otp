@@ -65,6 +65,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .search-input::placeholder{color:var(--text3)}
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;text-align:center}
+.stat-card.kpi-active{border-width:2px;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.1)}
+.stat-card.green.kpi-active{border-color:var(--accent)}
+.stat-card.gray.kpi-active{border-color:var(--text2)}
+.stat-card.warn.kpi-active{border-color:var(--warn)}
 .stat-num{font-size:24px;font-weight:600;line-height:1}
 .stat-lbl{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
 .stat-card.green .stat-num{color:var(--accent)}
@@ -205,10 +209,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <button class="filter-btn" id="dash-all" onclick="setDashDate('all',this)">All Time</button>
     </div>
     <div class="stat-row" style="margin-bottom:1.25rem">
-      <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl" id="st-total-lbl">Today Total</div></div>
-      <div class="stat-card green"><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
-      <div class="stat-card gray"><div class="stat-num" id="st-delivered">0</div><div class="stat-lbl">Delivered</div></div>
-      <div class="stat-card warn"><div class="stat-num" id="st-nootp">0</div><div class="stat-lbl">No OTP</div></div>
+      <div class="stat-card" id="kpi-all" onclick="setKpiFilter('all')" style="cursor:pointer;transition:.15s"><div class="stat-num" id="st-total">0</div><div class="stat-lbl" id="st-total-lbl">Today Total</div></div>
+      <div class="stat-card green" id="kpi-pending" onclick="setKpiFilter('pending')" style="cursor:pointer;transition:.15s"><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat-card gray" id="kpi-delivered" onclick="setKpiFilter('delivered')" style="cursor:pointer;transition:.15s"><div class="stat-num" id="st-delivered">0</div><div class="stat-lbl">Delivered</div></div>
+      <div class="stat-card warn" id="kpi-nootp" onclick="setKpiFilter('nootp')" style="cursor:pointer;transition:.15s"><div class="stat-num" id="st-nootp">0</div><div class="stat-lbl">No OTP</div></div>
     </div>
 
     <div id="search-results"></div>
@@ -344,6 +348,7 @@ function doLogout() {
 }
 
 function showApp() {
+  kpiFilter = "all";
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   var av = document.getElementById('pill-av');
@@ -436,12 +441,23 @@ function cardHTML(p) {
 
 // ── SEARCH ──
 var dashDateFilter = 'today';
+var kpiFilter = 'all';
 
 function setDashDate(period, btn) {
   dashDateFilter = period;
+  kpiFilter = 'all';
+  document.querySelectorAll('.stat-card').forEach(function(c){ c.classList.remove('kpi-active'); });
+  document.getElementById('kpi-all').classList.add('kpi-active');
   document.querySelectorAll('#dash-today,#dash-yesterday,#dash-all').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   updateStats();
+  renderTodayParcels();
+}
+
+function setKpiFilter(filter) {
+  kpiFilter = filter;
+  document.querySelectorAll('.stat-card').forEach(function(c){ c.classList.remove('kpi-active'); });
+  document.getElementById('kpi-' + filter).classList.add('kpi-active');
   renderTodayParcels();
 }
 
@@ -460,15 +476,22 @@ function getDashList() {
 function renderTodayParcels() {
   var container = document.getElementById('today-parcels');
   if (!container) return;
-  var list = getDashList().sort(function(a,b){
+  var list = getDashList();
+  // Apply KPI filter
+  if (kpiFilter === 'pending') list = list.filter(function(p){ return !p.delivered; });
+  else if (kpiFilter === 'delivered') list = list.filter(function(p){ return p.delivered; });
+  else if (kpiFilter === 'nootp') list = list.filter(function(p){ return !p.delivered && (!p.otp || p.otp === '—'); });
+  list = list.sort(function(a,b){
     return (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0);
   });
   var label = dashDateFilter === 'today' ? 'today' : dashDateFilter === 'yesterday' ? 'yesterday' : 'any time';
   if (!list.length) {
-    container.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels submitted ' + label + '</p></div>';
+    container.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><p>No parcels for this filter</p></div>';
     return;
   }
-  container.innerHTML = '<div class="parcel-list">' + list.map(cardHTML).join('') + '</div>';
+  // Show filter label
+  var filterLabel = kpiFilter === 'all' ? '' : ' — ' + (kpiFilter === 'nootp' ? 'No OTP' : kpiFilter.charAt(0).toUpperCase() + kpiFilter.slice(1));
+  container.innerHTML = '<div style="font-size:12px;color:var(--text3);margin-bottom:8px">' + list.length + ' parcel' + (list.length > 1 ? 's' : '') + filterLabel + '</div><div class="parcel-list">' + list.map(cardHTML).join('') + '</div>';
 }
 
 function doSearch() {
